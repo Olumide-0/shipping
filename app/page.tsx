@@ -1,8 +1,39 @@
 import Image from "next/image";
 import car from "../public/asset/image/Frame 5 (1).png";
-import { Truck, BadgeCheck, LockKeyhole, Sliders, Eye } from "lucide-react";
+import { Truck, BadgeCheck, LockKeyhole, Sliders, Eye, CircleCheck  } from "lucide-react";
 
 
+
+const car1 = "/asset/image/Background.png";
+const car2 = "/asset/image/Lumina Pro Kit.png";
+const car3 = "/asset/image/Velocity Audio Kit.png";
+
+const products = [
+  {
+    id: 1,
+    name: "Lumina Pro Kit",
+    price: "$499.00",
+    image: car2,
+  },
+  {
+    id: 2,
+    name: "Carbon Fiber Wheel",
+    price: "$1,200.00",
+    image: car1,
+  },
+  {
+    id: 3,
+    name: "Velocity Audio Kit",
+    price: "$899.00",
+    image: car3,
+  },
+  {
+    id: 4,
+    name: "Stealth Wall Charger",
+    price: "$649.00",
+    image: car2,
+  },
+];
 
 const features = [
   {
@@ -27,37 +58,16 @@ const features = [
   },
 ];
 
-const products = [
-  {
-    id: 1,
-    name: "Lumina Pro Kit",
-    price: "$499.00",
-    image: "/products/lumina-pro.jpg",
-  },
-  {
-    id: 2,
-    name: "Carbon Fiber Wheel",
-    price: "$1,200.00",
-    image: "/products/carbon-wheel.jpg",
-  },
-  {
-    id: 3,
-    name: "Velocity Audio Kit",
-    price: "$899.00",
-    image: "/products/velocity-audio.jpg",
-  },
-  {
-    id: 4,
-    name: "Stealth Wall Charger",
-    price: "$649.00",
-    image: "/products/stealth-charger.jpg",
-  },
+const productHighlights = [
+  "Fiber-Optic Precision",
+  "Invisible Installation",
+  "Smartphone App Controlled",
 ];
 
 export default function Home() {
   return (
   <div>
-      <section className="relative w-full h-screen mt-12">
+      <section className="relative w-full h-screen ">
 
       {/* Background Image */}
       <Image
@@ -88,39 +98,39 @@ export default function Home() {
         </div>
       </div>
     </section>
-    <section className="w-full bg-white border-t border-b border-gray-100 py-8">
-      <div className="max-w-5xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
+    <section className=" bg-white px-[80px] py-[80px] ">
+      <div className=" grid grid-cols-2 md:grid-cols-4 gap-8">
         {features.map(({ icon, title, subtitle }) => (
           <div key={title} className="flex flex-col items-center text-center gap-2">
             <span className="text-[#1A9E9E] mb-1">{icon}</span>
-            <p className="text-[11px] font-bold tracking-widest text-[#1A1B1F]">{title}</p>
-            <p className="text-[11px] text-gray-400 leading-snug">{subtitle}</p>
+            <p className="text-[14px] font-medium tracking-widest text-[#1A1B1F]">{title}</p>
+            <p className="text-[12px] font-semibold text-[#3C494E] leading-snug">{subtitle}</p>
           </div>
         ))}
       </div>
     </section>
-    <section className="w-full bg-white py-12 px-6">
-      <div className="max-w-6xl mx-auto">
+    <section className=" bg-white px-[80px] pb-[80px]">
+      <div className="flex flex-col gap-[64px]">
 
         {/* Header */}
-        <div className="flex items-start justify-between mb-8">
-          <div className="flex flex-col gap-2">
-            <span className="text-[11px] text-gray-500 border border-gray-200 rounded-full px-3 py-0.5 w-fit">
+        <div className="flex items-start justify-between ">
+          <div className="flex flex-col gap-[15px]">
+            <span className="text-[12px] font-bold text-[#00677F] bg-[#00677F1A]/60 rounded-full px-[12px] py-[4px] w-fit">
               CURATED SELECTION
             </span>
-            <h2 className="text-[28px] font-bold text-[#1A1B1F] leading-tight">
+            <h2 className="text-[32px] font-semibold text-[#1A1B1F] leading-tight">
               Featured Collection
             </h2>
           </div>
-          <button className="text-[11px] font-semibold tracking-widest text-[#1A9E9E] hover:underline mt-auto">
+          <button className="text-[14px] font-medium tracking-widest text-[#00677F] underline mt-auto">
             VIEW ALL PRODUCTS
           </button>
         </div>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-[32px]">
           {products.map((product) => (
-            <div key={product.id} className="flex flex-col gap-3">
+            <div key={product.id} className="flex flex-col gap-[8px]">
               {/* Image */}
               <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-gray-100">
                 <img
@@ -132,16 +142,16 @@ export default function Home() {
 
               {/* Info */}
               <div>
-                <p className="text-[14px] font-medium text-[#1A1B1F]">{product.name}</p>
-                <p className="text-[13px] text-[#1A9E9E] font-medium">{product.price}</p>
+                <p className="text-[24px] font-medium text-[#1A1B1F] pt-[16px]">{product.name}</p>
+                <p className="text-[14px] text-[#00677F] font-medium">{product.price}</p>
               </div>
 
               {/* Actions */}
-              <div className="flex items-center gap-2">
-                <button className="flex-1 bg-[#1A1B1F] hover:bg-[#2d2e33] text-white text-[12px] font-semibold tracking-widest py-2.5 rounded-md transition-colors duration-200">
+              <div className="flex items-center gap-[12px] pt-[16px]">
+                <button className="flex-1 bg-[#1A1B1F] hover:bg-[#2d2e33] text-[#FAF8FE] text-[12px] font-semibold tracking-widest py-[20px] rounded-md transition-colors duration-200">
                   ADD TO CART
                 </button>
-                <button className="w-9 h-9 flex items-center justify-center border border-gray-200 rounded-md hover:border-gray-400 transition-colors duration-200 shrink-0">
+                <button className="w-[43px] h-[37px] flex items-center justify-center border border-gray-200 rounded-md hover:border-gray-400 transition-colors duration-200 shrink-0">
                   <Eye size={15} strokeWidth={1.6} className="text-gray-500" />
                 </button>
               </div>
@@ -151,11 +161,11 @@ export default function Home() {
 
       </div>
     </section>
-    <section className="w-full bg-white py-16 px-6">
-      <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12">
+    <section className=" bg-white px-[80px] pb-[80px]">
+      <div className=" flex flex-col md:flex-row items-center gap-[24px]">
 
         {/* Left Content */}
-        <div className="flex-1 flex flex-col gap-6">
+        <div className="w-[50%] flex flex-col gap-6">
           <div>
             <h2 className="text-[32px] font-bold text-[#1A1B1F] leading-tight mb-4">
               The Transformation
@@ -183,32 +193,60 @@ export default function Home() {
         </div>
 
         {/* Right Image Grid */}
-        <div className="flex-1 relative">
-          {/* Decorative white shadow block bottom-right */}
-          <div className="absolute -bottom-4 -right-4 w-full h-full bg-gray-100 rounded-2xl z-0" />
+        <div className="">
+          <img src={car1} alt="" />
+        </div>
 
-          <div className="relative z-10 grid grid-cols-2 grid-rows-2 gap-1 rounded-2xl overflow-hidden shadow-lg">
+      </div>
+    </section>
+    <section className="w-full bg-[#F4F4F5] px-[80px] pb-[80px]">
+      <div className="flex flex-col md:flex-row items-center gap-16">
+
+        {/* Left — Product Image */}
+        <div className="flex-1 flex items-center justify-center">
+          <div className="rounded-2xl overflow-hidden shadow-xl w-full max-w-[560px] aspect-[4/3]">
             <img
-              src="/transformation/before-dash.jpg"
-              alt="Before - dashboard"
-              className="w-full h-[180px] object-cover"
-            />
-            <img
-              src="/transformation/after-dash.jpg"
-              alt="After - ambient lighting"
-              className="w-full h-[180px] object-cover"
-            />
-            <img
-              src="/transformation/before-settings.jpg"
-              alt="Before - settings"
-              className="w-full h-[180px] object-cover"
-            />
-            <img
-              src="/transformation/after-glow.jpg"
-              alt="After - glow"
-              className="w-full h-[180px] object-cover"
+              src="/products/lumina-ambient-kit.jpg"
+              alt="Lumina Ambient Kit"
+              className="w-full h-full object-cover"
             />
           </div>
+        </div>
+
+        {/* Right — Product Info */}
+        <div className="flex-1 flex flex-col gap-6 max-w-md">
+          {/* Badge */}
+          <span className="text-[11px] font-semibold tracking-widest text-gray-500 border border-gray-300 bg-white rounded-full px-3 py-1 w-fit">
+            NEW ARRIVAL
+          </span>
+
+          {/* Title */}
+          <h2 className="text-[36px] font-bold text-[#1A1B1F] leading-tight">
+            Lumina Ambient Kit
+          </h2>
+
+          {/* Price */}
+          <p className="text-[24px] font-semibold text-[#1A9E9E]">$249.00</p>
+
+          {/* Description */}
+          <p className="text-[14px] text-gray-500 leading-relaxed">
+            The definitive interior lighting experience. Featuring 64-color selection, smartphone integration, and dynamic music synchronization. Engineered specifically for seamless integration with luxury EV and performance vehicles.
+          </p>
+
+          {/* Feature List */}
+          <ul className="flex flex-col gap-3">
+            {productHighlights.map((highlight) => (
+              <li key={highlight} className="flex items-center gap-2.5">
+                <CircleCheck size={18} strokeWidth={1.6} className="text-[#1A9E9E] shrink-0" />
+                <span className="text-[14px] font-medium text-[#1A1B1F]">{highlight}</span>
+              </li>
+            ))}
+          </ul>
+
+          {/* CTA */}
+          <button className="mt-2 w-fit px-10 py-4 bg-[#1A6E7E] hover:bg-[#155f6d] text-white text-[12px] font-bold tracking-widest rounded-xl transition-colors duration-200">
+            ADD TO CART
+          </button>
         </div>
 
       </div>

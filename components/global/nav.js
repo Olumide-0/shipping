@@ -15,7 +15,7 @@ export default function Nav() {
       <div className="  fixed top-0 left-0 right-0 z-10  flex items-center justify-between px-[80px] py-[24px] bg-white border-b border-gray-100">
         {/* Logo */}
       <h1 className="text-[15px] font-bold tracking-wide text-[#1A1B1F] select-none">
-        LUXEDRIVE
+        GENESIS AUTOMODS
       </h1>
 
       {/* Center Nav Links */}
