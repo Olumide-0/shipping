@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { ShieldCheck, Scale, RotateCcw, Truck } from "lucide-react";
+import { ShieldCheck, Scale, RotateCcw } from "lucide-react";
 
+// Shipping details have been removed from this array
 const policies = [
   {
     id: "privacy",
@@ -82,7 +83,7 @@ const policies = [
             Unless otherwise indicated, the Site is our proprietary property and all source code, databases, functionality, software, website designs, audio, video, text, photographs, and graphics on the Site and the trademarks, service marks, and logos contained therein are owned or controlled by us.
           </p>
 
-          <div className="grid grid-cols-2 gap-4 mt-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
             <div className="bg-[#F4F4F5] rounded-xl p-5">
               <p className="text-[13px] font-bold text-[#1A1B1F] mb-2">User Registration</p>
               <p className="text-[13px] text-gray-500 leading-relaxed">You may be required to register with the Site. You agree to keep your password confidential.</p>
@@ -111,14 +112,14 @@ const policies = [
             We want you to be completely satisfied with your purchase. If you are not satisfied, you may return your items within 30 days of purchase for a full refund or exchange, provided the items are in their original condition and packaging.
           </p>
 
-          <div className="flex items-start gap-5 bg-[#F4F4F5] rounded-xl p-5 mt-2">
-            <img src="/refund-quality.jpg" alt="Quality Guarantee" className="w-[120px] h-[100px] rounded-lg object-cover shrink-0" />
+          <div className="flex flex-col sm:flex-row items-start gap-5 bg-[#F4F4F5] rounded-xl p-5 mt-2">
+            <img src="/refund-quality.jpg" alt="Quality Guarantee" className="w-full sm:w-[120px] h-[100px] rounded-lg object-cover shrink-0" />
             <div className="flex flex-col gap-2">
               <p className="text-[15px] font-bold text-[#1A1B1F]">Quality Guarantee</p>
               <p className="text-[13px] text-gray-500 leading-relaxed">
                 All our components undergo a rigorous 12-point inspection before shipping. If an item arrives damaged or defective, we will cover the return shipping and provide an immediate replacement or refund.
               </p>
-              <div className="flex items-center gap-2 mt-1">
+              <div className="flex flex-wrap items-center gap-2 mt-1">
                 <span className="text-[10px] font-bold tracking-widest text-gray-500 border border-gray-300 rounded-full px-3 py-1">30 DAY WINDOW</span>
                 <span className="text-[10px] font-bold tracking-widest text-gray-500 border border-gray-300 rounded-full px-3 py-1">FREE EXCHANGES</span>
               </div>
@@ -135,36 +136,14 @@ const policies = [
       </div>
     ),
   },
-  {
-    id: "shipping",
-    label: "Shipping Details",
-    icon: <Truck size={15} strokeWidth={1.6} />,
-    tag: "DELIVERY",
-    title: "Shipping Details",
-    date: "Last Updated: July 15, 2024",
-    content: (
-      <div className="flex flex-col gap-8">
-        <div className="flex flex-col gap-3">
-          <h3 className="text-[20px] font-bold text-[#1A1B1F]">1. Delivery Times</h3>
-          <p className="text-[14px] text-gray-500 leading-relaxed">
-            Standard shipping takes 3–5 business days. Express shipping is available at checkout for 1–2 business day delivery. All orders are processed within 24 hours of placement.
-          </p>
-        </div>
-        <div className="flex flex-col gap-3">
-          <h3 className="text-[20px] font-bold text-[#1A1B1F]">2. International Shipping</h3>
-          <p className="text-[14px] text-gray-500 leading-relaxed">
-            We ship to over 40 countries worldwide. International delivery typically takes 7–14 business days depending on customs clearance in your country.
-          </p>
-        </div>
-      </div>
-    ),
-  },
 ];
 
 export default function LegalPage() {
   const searchParams = useSearchParams();
   const [activePolicy, setActivePolicy] = useState("privacy");
-  const current = policies.find((p) => p.id === activePolicy)!;
+  
+  // Finds the current policy, or defaults to "privacy" if the ID isn't found
+  const current = policies.find((p) => p.id === activePolicy) || policies[0];
 
   useEffect(() => {
     const policy = searchParams.get("policy");
@@ -173,38 +152,40 @@ export default function LegalPage() {
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-b from-[#EBF0F2] to-white">
-      <div className="px-[80px] py-[80px]">
-
+      <div className="px-5 py-28 md:px-12 lg:px-[80px] lg:py-[80px]">
+        
         {/* Header */}
-        <div className="flex flex-col gap-3 mb-12">
-          <h1 className="text-[52px] font-bold text-[#1A1B1F]">Legal Center</h1>
+        <div className="flex flex-col gap-3 mb-8 md:mb-12">
+          <h1 className="text-[32px] md:text-[52px] font-bold text-[#1A1B1F]">Legal Center</h1>
           <p className="text-[14px] text-gray-500 max-w-sm leading-relaxed">
             Ensuring technical excellence and transparency in every transaction. Review our policies and terms below.
           </p>
         </div>
 
         {/* Body */}
-        <div className="flex gap-8 items-start">
+        <div className="flex flex-col lg:flex-row gap-8 items-start">
 
           {/* Sidebar */}
-          <div className="w-[30%] flex flex-col gap-3">
-            {policies.map(({ id, label, icon }) => (
-              <button
-                key={id}
-                onClick={() => setActivePolicy(id)}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] font-medium transition-colors duration-150 text-left ${
-                  activePolicy === id
-                    ? "bg-[#00677F] text-white"
-                    : "text-gray-500 hover:text-[#1A1B1F]"
-                }`}
-              >
-                {icon}
-                {label}
-              </button>
-            ))}
+          <div className="w-full lg:w-[30%] flex flex-col gap-3">
+            <div className="flex lg:flex-col gap-2 overflow-x-auto pb-2 lg:pb-0 scrollbar-hide">
+              {policies.map(({ id, label, icon }) => (
+                <button
+                  key={id}
+                  onClick={() => setActivePolicy(id)}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl text-[13px] md:text-[14px] font-medium transition-colors duration-150 text-left whitespace-nowrap lg:whitespace-normal flex-shrink-0 lg:flex-shrink ${
+                    activePolicy === id
+                      ? "bg-[#00677F] text-white"
+                      : "bg-white lg:bg-transparent text-gray-500 hover:text-[#1A1B1F] border border-gray-200 lg:border-none"
+                  }`}
+                >
+                  {icon}
+                  {label}
+                </button>
+              ))}
+            </div>
 
             {/* Need Help Card */}
-            <div className="mt-4 border border-gray-200 rounded-2xl p-5 flex flex-col gap-3 bg-white">
+            <div className="hidden lg:flex border border-gray-200 rounded-2xl p-5 flex-col gap-3 bg-white">
               <p className="text-[13px] font-bold text-[#00677F]">Need help?</p>
               <p className="text-[13px] text-gray-500 leading-relaxed">Contact our legal team for any specific queries.</p>
               <button className="w-full py-2.5 bg-[#00677F] hover:bg-[#005569] text-white text-[12px] font-bold tracking-widest rounded-xl transition-colors duration-200">
@@ -214,9 +195,9 @@ export default function LegalPage() {
           </div>
 
           {/* Main Content */}
-          <div className="w-[70%] border border-gray-200 rounded-2xl p-10 bg-white">
+          <div className="w-full lg:w-[70%] border border-gray-200 rounded-2xl p-6 md:p-10 bg-white">
             <p className="text-[11px] font-bold tracking-widest text-[#00677F] mb-2">{current.tag}</p>
-            <h2 className="text-[32px] font-bold text-[#1A1B1F] mb-1">{current.title}</h2>
+            <h2 className="text-[24px] md:text-[32px] font-bold text-[#1A1B1F] mb-1">{current.title}</h2>
             <p className="text-[13px] text-gray-400 mb-8">{current.date}</p>
             {current.content}
           </div>

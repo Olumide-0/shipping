@@ -56,9 +56,11 @@ export default function Nav() {
 
         {/* Right Icons */}
         <div className="flex items-center gap-4">
+          <Link href="/cart">
           <button className="text-[#1A1B1F] hover:text-[#1A6BFF] transition-colors duration-150 cursor-pointer">
             <ShoppingCart size={16} strokeWidth={1.8} />
           </button>
+          </Link>
           <button className="text-[#1A1B1F] hover:text-[#1A6BFF] transition-colors duration-150 cursor-pointer">
             <Settings size={16} strokeWidth={1.8} />
           </button>
