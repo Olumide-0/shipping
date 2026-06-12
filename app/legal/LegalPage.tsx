@@ -4,12 +4,19 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { ShieldCheck, Scale, RotateCcw } from "lucide-react";
 
+
+const car = "/asset/image/Premium Packaging.png";
+const icon1 = "/asset/icons/Icon.png";
+const icon2 = "/asset/icons/Container (5).png";
+const icon3 = "/asset/icons/Container (6).png";
+
+
 // Shipping details have been removed from this array
 const policies = [
   {
     id: "privacy",
     label: "Privacy Policy",
-    icon: <ShieldCheck size={15} strokeWidth={1.6} />,
+    icon: icon3,
     tag: "DATA PROTECTION",
     title: "Privacy Policy",
     date: "Last Updated: October 24, 2024",
@@ -64,7 +71,7 @@ const policies = [
   {
     id: "terms",
     label: "Terms & Conditions",
-    icon: <Scale size={15} strokeWidth={1.6} />,
+    icon: icon1,
     tag: "LEGAL AGREEMENT",
     title: "Terms & Conditions",
     date: "Last Updated: September 12, 2024",
@@ -100,7 +107,7 @@ const policies = [
   {
     id: "refund",
     label: "Refund Policy",
-    icon: <RotateCcw size={15} strokeWidth={1.6} />,
+    icon: icon2,
     tag: "CUSTOMER SATISFACTION",
     title: "Refund Policy",
     date: "Last Updated: August 05, 2024",
@@ -113,7 +120,7 @@ const policies = [
           </p>
 
           <div className="flex flex-col sm:flex-row items-start gap-5 bg-[#F4F4F5] rounded-xl p-5 mt-2">
-            <img src="/refund-quality.jpg" alt="Quality Guarantee" className="w-full sm:w-[120px] h-[100px] rounded-lg object-cover shrink-0" />
+            <img src={car} className="w-full sm:w-[120px] h-[100px] rounded-lg object-cover shrink-0" />
             <div className="flex flex-col gap-2">
               <p className="text-[15px] font-bold text-[#1A1B1F]">Quality Guarantee</p>
               <p className="text-[13px] text-gray-500 leading-relaxed">
@@ -178,7 +185,7 @@ export default function LegalPage() {
                       : "bg-white lg:bg-transparent text-gray-500 hover:text-[#1A1B1F] border border-gray-200 lg:border-none"
                   }`}
                 >
-                  {icon}
+                  <img src={icon} alt="" />
                   {label}
                 </button>
               ))}

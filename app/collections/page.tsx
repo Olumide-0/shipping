@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ShoppingCart, Minus, Plus, CircleCheck, Truck, Smartphone, Download, ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
 
 
 const star = "/asset/icons/Container (2).png"
@@ -204,13 +205,17 @@ export default function Collection() {
 
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row items-center gap-3 lg:gap-4 w-full lg:w-[85%] xl:w-[70%] my-6 lg:my-[24px]">
-        <button className="flex items-center justify-center gap-2 w-full py-4 lg:py-[19px] bg-[#00677F] hover:bg-[#005569] text-white text-[13px] lg:text-[14px] font-medium tracking-widest rounded-[8px] transition-colors duration-200">
+        <Link href="/cart" className="w-[50%]">
+        <button className="w-full flex items-center justify-center gap-2  py-4 lg:py-[19px] bg-[#00677F] hover:bg-[#005569] text-white text-[13px] lg:text-[14px] font-medium tracking-widest rounded-[8px] transition-colors duration-200">
           <ShoppingCart size={15} />
           ADD TO CART
         </button>
+        </Link>
+        <Link href="/checkout" className="w-[50%]">
         <button className="w-full py-4 lg:py-[19px] border border-[#6C797F] hover:bg-gray-50 text-[#1A1B1F] text-[13px] lg:text-[14px] font-medium tracking-widest rounded-[8px] transition-colors duration-200">
           BUY NOW
         </button>
+        </Link>
       </div>
 
       {/* Perks Grid */}

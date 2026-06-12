@@ -268,9 +268,9 @@ export default function Home() {
  
               {/* Actions */}
               <div className="flex items-center gap-[10px] pt-[12px]">
-                <button className="flex-1 bg-[#1A1B1F] hover:bg-[#2d2e33] text-[#FAF8FE] text-[11px] font-semibold tracking-widest py-[16px] rounded-md transition-colors duration-200">
+                <Link href="/cart" className="flex-1 bg-[#1A1B1F] hover:bg-[#2d2e33] text-[#FAF8FE] text-[11px] text-center font-semibold tracking-widest py-[16px] rounded-md transition-colors duration-200">
                   ADD TO CART
-                </button>
+                </Link>
                 <button className="w-[43px] h-[43px] flex items-center justify-center border border-gray-200 rounded-md hover:border-gray-400 transition-colors duration-200 shrink-0">
                   <Eye size={15} strokeWidth={1.6} className="text-gray-500" />
                 </button>
@@ -300,9 +300,9 @@ export default function Home() {
  
               {/* Actions */}
               <div className="flex items-center gap-[12px] pt-[16px]">
-                <button className="flex-1 bg-[#1A1B1F] hover:bg-[#2d2e33] text-[#FAF8FE] text-[12px] font-semibold tracking-widest py-[20px] rounded-md transition-colors duration-200">
+                <Link href="/cart"  className="flex-1 bg-[#1A1B1F] hover:bg-[#2d2e33] text-[#FAF8FE] text-center text-[12px] font-semibold tracking-widest py-[20px] rounded-md transition-colors duration-200">
                   ADD TO CART
-                </button>
+                </Link>
                 <button className="w-[43px] h-[37px] flex items-center justify-center border border-gray-200 rounded-md hover:border-gray-400 transition-colors duration-200 shrink-0">
                   <Eye size={15} strokeWidth={1.6} className="text-gray-500" />
                 </button>
@@ -387,9 +387,11 @@ export default function Home() {
         ))}
       </ul>
 
+      <Link href="/cart">
       <button className="mt-2 w-full lg:w-fit px-[48px] py-[18px] lg:py-[20px] bg-[#00677F] hover:bg-[#155f6d] text-white text-[13px] lg:text-[14px] font-medium tracking-widest rounded-[12px] transition-colors duration-200">
         ADD TO CART
       </button>
+      </Link>
     </div>
 
   </div>

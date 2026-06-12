@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Trash2, Minus, Plus, PlusCircle, ShieldCheck, CreditCard, MessageSquarePlus, Lock, Headphones } from "lucide-react";
+import Link from "next/link";
 
 const car = "/asset/image/Lumina Pro Kit (1).png";
 
@@ -142,10 +143,10 @@ export default function Cart() {
               </div>
             </div>
 
-            <button className="flex items-center justify-center gap-2 w-full py-3.5 bg-[#00677F] hover:bg-[#005569] text-white text-[12px] font-bold tracking-widest rounded-xl transition-colors duration-200">
+            <Link href="/order-confirmation" className="flex items-center justify-center gap-2 w-full py-3.5 bg-[#00677F] hover:bg-[#005569] text-white text-[12px] font-bold tracking-widest rounded-xl transition-colors duration-200">
               SECURE CHECKOUT
               <Lock size={14} />
-            </button>
+            </Link>
 
             <div className="flex flex-col items-center gap-3 border-t border-gray-100 pt-5">
               <div className="flex items-center gap-4 text-gray-400">
