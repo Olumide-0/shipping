@@ -197,7 +197,10 @@ export default function Home() {
  
         {/* Buttons */}
         <div className="flex items-center gap-4 lg:gap-[38px]">
-          <button className="px-6 lg:px-[24px] py-4 lg:py-[16px] bg-[#00BFDF] lg:bg-[#00677F] hover:opacity-90 text-white  text-[14px] lg:text-[30px]
+          {/* ✅ CHANGE 1: Added onClick scroll handler to Shop Now button */}
+          <button
+            onClick={() => document.getElementById("featured-collection")?.scrollIntoView({ behavior: "smooth" })}
+            className="px-6 lg:px-[24px] py-4 lg:py-[16px] bg-[#00BFDF] lg:bg-[#00677F] hover:opacity-90 text-white  text-[14px] lg:text-[30px]
             font-semibold lg:font-medium rounded-[10px] lg:rounded-[8px] transition-colors duration-200
           ">
             Shop Now
@@ -229,11 +232,12 @@ export default function Home() {
     ))}
   </div>
 </section>
-     <section className="bg-white px-0 lg:px-[10px] xl:px-[80px] md:pb-[80px] md:pt-[10px]  py-[50px]">
+     {/* ✅ CHANGE 2: Added id="featured-collection" to the third section */}
+     <section id="featured-collection" className="bg-white px-0 lg:px-[10px] xl:px-[80px] md:pb-[80px] md:pt-[10px]  py-[50px]">
       <div className="flex flex-col gap-[40px] lg:gap-[64px]">
  
         {/* Header */}
-        <div className="flex items-start justify-between px-6 lg:px-0">
+        <div className="flex items-start lg:items-center justify-between px-6 lg:px-0">
           <div className="flex flex-col gap-[15px]">
             <span className="text-[12px] font-bold text-[#00677F] bg-[#00677F1A]/60 rounded-full px-[12px] py-[4px] w-fit">
               CURATED SELECTION
@@ -242,9 +246,11 @@ export default function Home() {
               Featured Collection
             </h2>
           </div>
+          <Link href="/collections">
           <button className="text-[12px] md:text-[14px] font-medium tracking-widest text-[#00677F] underline mt-auto">
             VIEW ALL
           </button>
+          </Link>
         </div>
  
         {/* ── Mobile: horizontal scroll, plain stacked cards ── */}
@@ -449,7 +455,6 @@ export default function Home() {
                <img key={i} src={star} alt="star rating" className="w-4 h-4 md:w-5 md:h-5" />
               ))}
             </div>
-            {/* Removed w-[85%] to allow text to flow naturally on smaller screens */}
             <p className="text-[14px] md:text-[16px] text-[#1A1B1F] leading-relaxed italic xl:w-[85%]">
               {quote}
             </p>
@@ -514,4 +519,3 @@ export default function Home() {
   </div>
   );
 }
-

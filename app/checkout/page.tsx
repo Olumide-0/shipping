@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { CreditCard, Wallet, ShieldCheck, BadgeCheck, Award, Lock, Headphones } from "lucide-react";
+import Link from "next/link";
 
 // Assuming your images exist at these paths
 const car = "/asset/image/AB6AXuDaxklDelxQw8YZkfmWcJ2X1klU93Ci1J7IvWUyznocDQGkgm0NHgp4nj3JFGoImQ9yNmkeMF9wdxgR7px54GnRQPuCPoZgLpftWXNSOSEsw5d5SQPby72GqJ0E6rhRBWGYqwz-uK5UuOy1jlHjvc0TIAID2WofDP5yAHa4ZI92OdUJuRUp4MSHR4MnZeXWPI1nsVZOD6uqgr6qLxELn6muqaJQ2shbBr6K7SN2RMJ4DKkxf6DF.png";
@@ -168,9 +169,11 @@ export default function Checkout() {
               <span className="text-[18px] font-bold text-[#1A1B1F]">Total</span>
               <span className="text-[22px] font-bold text-[#00677F]">${total.toFixed(2)}</span>
             </div>
+            <Link href="/order-confirmation">
             <button className="flex items-center justify-center gap-2 w-full py-3.5 bg-[#00677F] hover:bg-[#005569] text-white text-[13px] font-semibold rounded-xl transition-colors duration-200">
               <Lock size={15} /> Secure Pay Now
             </button>
+            </Link>
             <p className="text-[12px] text-gray-400 text-center leading-relaxed">Your transaction is protected by end-to-end encryption.</p>
           </div>
 

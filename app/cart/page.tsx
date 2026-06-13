@@ -143,7 +143,7 @@ export default function Cart() {
               </div>
             </div>
 
-            <Link href="/order-confirmation" className="flex items-center justify-center gap-2 w-full py-3.5 bg-[#00677F] hover:bg-[#005569] text-white text-[12px] font-bold tracking-widest rounded-xl transition-colors duration-200">
+            <Link href="/checkout" className="flex items-center justify-center gap-2 w-full py-3.5 bg-[#00677F] hover:bg-[#005569] text-white text-[12px] font-bold tracking-widest rounded-xl transition-colors duration-200">
               SECURE CHECKOUT
               <Lock size={14} />
             </Link>

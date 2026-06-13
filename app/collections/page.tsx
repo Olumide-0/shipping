@@ -204,14 +204,14 @@ export default function Collection() {
       </div>
 
       {/* Action Buttons */}
-      <div className="flex flex-col sm:flex-row items-center gap-3 lg:gap-4 w-full lg:w-[85%] xl:w-[70%] my-6 lg:my-[24px]">
-        <Link href="/cart" className="w-[50%]">
+      <div className="flex flex-col sm:flex-row lg:items-center gap-3 lg:gap-4 w-full lg:w-[85%] xl:w-[70%] my-6 lg:my-[24px]">
+        <Link href="/cart" className="md:w-[50%]">
         <button className="w-full flex items-center justify-center gap-2  py-4 lg:py-[19px] bg-[#00677F] hover:bg-[#005569] text-white text-[13px] lg:text-[14px] font-medium tracking-widest rounded-[8px] transition-colors duration-200">
           <ShoppingCart size={15} />
           ADD TO CART
         </button>
         </Link>
-        <Link href="/checkout" className="w-[50%]">
+        <Link href="/checkout" className="md:w-[50%]">
         <button className="w-full py-4 lg:py-[19px] border border-[#6C797F] hover:bg-gray-50 text-[#1A1B1F] text-[13px] lg:text-[14px] font-medium tracking-widest rounded-[8px] transition-colors duration-200">
           BUY NOW
         </button>
