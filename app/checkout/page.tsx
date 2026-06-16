@@ -5,8 +5,8 @@ import { CreditCard, Wallet, ShieldCheck, BadgeCheck, Award, Lock, Headphones } 
 import Link from "next/link";
 
 // Assuming your images exist at these paths
-const car = "/asset/image/AB6AXuDaxklDelxQw8YZkfmWcJ2X1klU93Ci1J7IvWUyznocDQGkgm0NHgp4nj3JFGoImQ9yNmkeMF9wdxgR7px54GnRQPuCPoZgLpftWXNSOSEsw5d5SQPby72GqJ0E6rhRBWGYqwz-uK5UuOy1jlHjvc0TIAID2WofDP5yAHa4ZI92OdUJuRUp4MSHR4MnZeXWPI1nsVZOD6uqgr6qLxELn6muqaJQ2shbBr6K7SN2RMJ4DKkxf6DF.png";
-const car1 = "/asset/image/AB6AXuAV4VJlfMAOt93PId3fbylUkqOC9QEyTkY5LDALJ5tVOcJUxaV5Fr-9iHcDaPOBqJ3QIIeVi-LgJsCIvXCjdmeFp8wSbsMcqhLxQQZEJ0VAeU516_ZsHDkEivGn4lAt2Lxuj6bbBtFxqvJsugrqZ6w-VKrnBfpCoYfdrKEQGdLd_M_txDykolNhyiRKIt9XYxkC7KEW8Js330XqfNfYs11rsyg6I09NQosBH5P7Ob0JR_1-mHCO.png";
+const car = "/asset/image/Container (14).png";
+const car1 = "/asset/image/Container (7).png";
 
 const orderItems = [
   { id: 1, name: "Precision Charge Pro", variant: "Midnight Chrome Edition", qty: 1, price: 899.0, src: car1 },

@@ -4,11 +4,11 @@ import { CheckIcon, TruckIcon, FileTextIcon, MapPinIcon, CreditCardIcon } from "
 
 
 const car1 = "/asset/image/Background (9).png";
-const car2 = "/asset/image/AB6AXuAY0F44SnFL2XDYpKwSQTJxKz3X4qZ4sVYekrtT3fOhrqTIS2UsZ1Q8pod5c7N4XXWTTTK2eRbG3ampsZzi8Et5xZ9ZG04u_hHuqwSImbjuN8nVNJR-D1T4FITYEMPdI9hTT0bWyPu0urWHKD7n2dBcdzerQ69XhJ8dp7Lx48IlC_RK9UfHzVN4PbvZV2vj8qixl0v_nZ2vDdBqXAexQh9G-xFC29nBGjBsHopvf6OY.png";
+const car2 = "/asset/image/Container (10).png";
 const car3 = "/asset/image/Background (10).png";
 const car4 = "/asset/image/Background (11).png";
 const car5 = "/asset/image/Background (12).png";
-const car6 = "/asset/image/AB6AXuCdJYIRcd5c9e38jiUJUNWd6P5Ec3CWsMBIp498yupiYKTpk8NR99vghlZ0JChRvEgBntrWTUx0sxeAODHz8XFTG6O7lrvqmcEsrjsoIehXUzdTNxTfa-pKcy0dqdqipfuu7280J-wbHrG6ml289wyozb0N8TqPwJuiQaGYFaE6hj_33zHBM1Axpwz3JPnNK_fDqajriq5_GLp1nCqC9iYi4MCwVNiykGomY3RBrgjc.png"
+const car6 = "/asset/image/Container (13).png"
 
 const orderData = {
   orderNumber: "LXD-992-883401",

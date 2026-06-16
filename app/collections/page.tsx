@@ -7,21 +7,21 @@ import Link from "next/link";
 
 const star = "/asset/icons/Container (2).png"
 const star1 = "/asset/icons/Container (3).png"
-const first = "/asset/image/AB6AXuAvUrC2jEIjqZYPUxJ9kofb0j6waM238GwMi-yO0hZQ--EEOfF2Bt6BaHqHD2zSKPeqvPcR0zLY3zfKlIG3KlXiGafrABYVUh4jQyfovF88FAPnu2l5cSQIGzSoLTXaR40_u5URonnQHqN0XwmtcfcUjwKmF7vHPMWekz4ETwi7wYI1K2N4FNV3A4quiAhEgE4rn2Rpq1BS-YPPfCs8nzHK1VZ7x-HBkYXipYnIBLTT.png"
-const second = "/asset/image/AB6AXuAXDW8FrZ1RYMvglhp2Ox_iByEeGwPtxQ5ULoUzstPgeJvZc4fsaXr6iFHhzkAwaYpHIDD-kSAukokSy5bFI3z59ctgLVEAuPMRw0RuQflzX3PdB6lFQRJX8pXsBO1EiS-5k9-VfyNCS_VJ87LLm57A7KmcV16x2bUMQ7yUArtlB5CpG3iheGRw_hNnFxcm9iTRdXsSs7ppXVR4WFpw0eczxW7fUsoafwvG-L2pNN8n.png"
+const first = "/asset/image/Container (8).png"
+const second = "/asset/image/Container (9).png"
 const third = "/asset/image/Background (7).png"
 const fourth = "/asset/image/Background (8).png"
 
 
 const colorVariants = [
-  { name: "Neon Blue", value: "#22D3EE", src: "/asset/image/AB6AXuB955-0esBpWIa0NIL6Z4VK5hRWTz3Xdo9n_uzzkxPYEc3ZH-uwcs_rHJAYzlSA2AoKlbcZPSeESjehCg8742UmEoWYEVfEUI_d26P44q1njKcWLakzQ_TAkkaIuGlSIkE5Qzvci3hxM_82xyATLhTJcXiCKmUNfaSKVAVLMBr84acyi3puNIBJ6l86E6l6xuMBJ_TscUz1PMB5_Zvyi6NKGFlbVFjuiXm86n_FJCP6.png" },
+  { name: "Neon Blue", value: "#22D3EE", src: "/asset/image/Container (11).png" },
   { name: "Arctic White", value: "#F3F4F6", src: "/asset/image/Background (4).png" },
   { name: "Crimson Red", value: "#EF4444", src: "/asset/image/Background (5).png" },
 ];
 
 const thumbnails = [
-  { id: 0, src: "/asset/image/AB6AXuB955-0esBpWIa0NIL6Z4VK5hRWTz3Xdo9n_uzzkxPYEc3ZH-uwcs_rHJAYzlSA2AoKlbcZPSeESjehCg8742UmEoWYEVfEUI_d26P44q1njKcWLakzQ_TAkkaIuGlSIkE5Qzvci3hxM_82xyATLhTJcXiCKmUNfaSKVAVLMBr84acyi3puNIBJ6l86E6l6xuMBJ_TscUz1PMB5_Zvyi6NKGFlbVFjuiXm86n_FJCP6.png" },
-  { id: 1, src: "/asset/image/AB6AXuBCKBigtsCGvZdVgiaVbic-Awpb4D16VNJnoJPP69lbVfmwAmQ0g1SMlPUd0mzg-AcDU3BhLzCRzp0UvOsJvNZs-95_zdsqCBXf9HrePc5encc6QFEKL9lx_r_Me_iMgP6JZprqAPrN1nqQxtW88mCXGqupI-DY9VvGJVl41FmhrwcLltkSYURCFsnRjkPjLZhii7Qm3Y5TXvk6S4ooH2ivgZHjwKVyVE6trsccyl5I.png" },
+  { id: 0, src: "/asset/image/Container (11).png" },
+  { id: 1, src: "/asset/image/Container (12).png" },
   { id: 2, src: "/asset/image/Background (4).png" },
   { id: 3, src: "/asset/image/Background (5).png" },
   { id: 4, src: "/asset/image/Background (6).png" },
