@@ -4,14 +4,14 @@ import { useState } from "react";
 import car from "../public/asset/image/Frame 5 (1).png";
 import { Truck, BadgeCheck, LockKeyhole, Sliders, Eye, CircleCheck, Star  } from "lucide-react";
 import Link from "next/link";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { formatPrice } from "@/lib/utils";
 // import Footer from "../components/global/footer"
 
 
 
 
-const car1 = "/asset/image/Background.png";
-const car2 = "/asset/image/Lumina Pro Kit.png";
-const car3 = "/asset/image/Velocity Audio Kit.png";
 const car4 = "/asset/image/Container.png";
 const car5 = "/asset/image/Container (1).png";
 const mobile = "/asset/image/Container (4).png";
@@ -19,33 +19,6 @@ const star = "/asset/icons/Container (2).png"
 const img = "/asset/image/Background (1).png"
 const img1 = "/asset/image/Background (2).png"
 const img2 = "/asset/image/Background (3).png"
-
-const products = [
-  {
-    id: 1,
-    name: "Lumina Pro Kit",
-    price: "$499.00",
-    image: car2,
-  },
-  {
-    id: 2,
-    name: "Carbon Fiber Wheel",
-    price: "$1,200.00",
-    image: car1,
-  },
-  {
-    id: 3,
-    name: "Velocity Audio Kit",
-    price: "$899.00",
-    image: car3,
-  },
-  {
-    id: 4,
-    name: "Stealth Wall Charger",
-    price: "$649.00",
-    image: car2,
-  },
-];
 
 const features = [
   {
@@ -126,6 +99,8 @@ const faqs = [
 
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  // Live from Convex. undefined while loading, then the first 4 products.
+  const products = (useQuery(api.products.list) ?? []).slice(0, 4);
   return (
   <div>
      <section className="relative w-full h-screen">
@@ -256,11 +231,11 @@ export default function Home() {
         {/* ── Mobile: horizontal scroll, plain stacked cards ── */}
         <div className="lg:hidden flex gap-4 overflow-x-auto px-6 pb-2">
           {products.map((product) => (
-            <div key={product.id} className="flex-none w-[72vw] max-w-[280px] flex flex-col gap-[8px]">
+            <div key={product._id} className="flex-none w-[72vw] max-w-[280px] flex flex-col gap-[8px]">
               {/* Image */}
               <div className="w-full aspect-[4/3] rounded-xl overflow-hidden bg-gray-100">
                 <img
-                  src={product.image}
+                  src={product.images[0]}
                   alt={product.name}
                   className="w-full h-full object-cover"
                 />
@@ -269,7 +244,7 @@ export default function Home() {
               {/* Info */}
               <div>
                 <p className="text-[18px] font-medium text-[#1A1B1F] pt-[12px]">{product.name}</p>
-                <p className="text-[13px] text-[#00677F] font-medium">{product.price}</p>
+                <p className="text-[13px] text-[#00677F] font-medium">{formatPrice(product.price)}</p>
               </div>
  
               {/* Actions */}
@@ -288,11 +263,11 @@ export default function Home() {
         {/* ── Desktop: original 4-col grid ── */}
         <div className="hidden lg:grid grid-cols-4 gap-[32px] lg:gap-[10px] xl-gap-[32px]">
           {products.map((product) => (
-            <div key={product.id} className="flex flex-col gap-[8px]">
+            <div key={product._id} className="flex flex-col gap-[8px]">
               {/* Image */}
               <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-gray-100">
                 <img
-                  src={product.image}
+                  src={product.images[0]}
                   alt={product.name}
                   className="w-full h-full object-cover"
                 />
@@ -301,7 +276,7 @@ export default function Home() {
               {/* Info */}
               <div>
                 <p className="text-[24px] font-medium text-[#1A1B1F] pt-[16px]">{product.name}</p>
-                <p className="text-[14px] text-[#00677F] font-medium">{product.price}</p>
+                <p className="text-[14px] text-[#00677F] font-medium">{formatPrice(product.price)}</p>
               </div>
  
               {/* Actions */}

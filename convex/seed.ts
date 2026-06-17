@@ -1,0 +1,104 @@
+import { mutation } from "./_generated/server";
+
+// Pulled from the hardcoded arrays in app/page.tsx, app/collections/page.tsx,
+// and app/order-confirmation/page.tsx. Prices are in CENTS.
+const PRODUCTS = [
+  {
+    name: "Lumina Pro Kit",
+    slug: "lumina-pro-kit",
+    category: "TECH",
+    description:
+      "High-quality fiber optic lighting system designed for seamless integration. Control intensity and palette directly from your mobile device.",
+    price: 49900,
+    images: [
+      "/asset/image/Lumina Pro Kit.png",
+      "/asset/image/Container (11).png",
+      "/asset/image/Container (12).png",
+    ],
+    colorVariants: [
+      { name: "Neon Blue", value: "#22D3EE", image: "/asset/image/Container (11).png" },
+      { name: "Arctic White", value: "#F3F4F6", image: "/asset/image/Background (4).png" },
+      { name: "Crimson Red", value: "#EF4444", image: "/asset/image/Background (5).png" },
+    ],
+    specs: [
+      { label: "Light Source", value: "SMD 5050 RGB LED" },
+      { label: "Cable Length", value: "6 Meters (Trim-to-fit)" },
+      { label: "Power Input", value: "DC 12V Automotive" },
+      { label: "Connectivity", value: "Bluetooth 5.0 Low Energy" },
+    ],
+    inStock: true,
+    badge: "BESTSELLER",
+  },
+  {
+    name: "Carbon Fiber Wheel",
+    slug: "carbon-fiber-wheel",
+    category: "PERFORMANCE",
+    description: "Lightweight carbon fiber wheel engineered for performance and elegance.",
+    price: 120000,
+    images: ["/asset/image/Background.png", "/asset/image/Container (9).png"],
+    inStock: true,
+  },
+  {
+    name: "Velocity Audio Kit",
+    slug: "velocity-audio-kit",
+    category: "AUDIO",
+    description: "Premium in-car audio system tuned for high-fidelity sound.",
+    price: 89900,
+    images: ["/asset/image/Velocity Audio Kit.png", "/asset/image/Background (7).png"],
+    inStock: true,
+  },
+  {
+    name: "Stealth Wall Charger",
+    slug: "stealth-wall-charger",
+    category: "TECH",
+    description: "Midnight Black | 48A Rapid Charge home charging station.",
+    price: 64900,
+    images: ["/asset/image/Container (10).png"],
+    inStock: true,
+  },
+  {
+    name: "Lumina Ambient Kit",
+    slug: "lumina-ambient-kit",
+    category: "TECH",
+    description:
+      "The definitive interior lighting experience. 64-color selection, smartphone integration, and dynamic music synchronization.",
+    price: 24900,
+    images: ["/asset/image/Container (1).png"],
+    inStock: true,
+    badge: "NEW ARRIVAL",
+  },
+  {
+    name: "Apex HUD Display",
+    slug: "apex-hud-display",
+    category: "NAVIGATION",
+    description: "Heads-up display projecting speed and navigation onto your windshield.",
+    price: 39900,
+    images: ["/asset/image/Container (8).png"],
+    inStock: true,
+  },
+  {
+    name: "Flux Wireless Charger",
+    slug: "flux-wireless-charger",
+    category: "TECH",
+    description: "Fast wireless charging pad that mounts cleanly in your console.",
+    price: 14500,
+    images: ["/asset/image/Background (8).png"],
+    inStock: true,
+  },
+];
+
+// Run with: npx convex run seed:run
+// Idempotent: clears the products table, then reloads it.
+export const run = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const existing = await ctx.db.query("products").collect();
+    for (const p of existing) {
+      await ctx.db.delete(p._id);
+    }
+    for (const p of PRODUCTS) {
+      await ctx.db.insert("products", p);
+    }
+    return { inserted: PRODUCTS.length };
+  },
+});

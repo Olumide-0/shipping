@@ -4,6 +4,12 @@ import { ShoppingCart, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
+import {
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
 
 const navLinks = [
   { label: "Shop", href: "/" },
@@ -78,6 +84,17 @@ export default function Nav() {
                 <ShoppingCart size={16} strokeWidth={1.8} />
               </button>
             </Link>
+
+            <SignedOut>
+              <SignInButton mode="modal">
+                <button className="text-[13px] font-medium text-[#1A1B1F] hover:text-[#00677F] transition-colors duration-150 cursor-pointer">
+                  Sign in
+                </button>
+              </SignInButton>
+            </SignedOut>
+            <SignedIn>
+              <UserButton afterSignOutUrl="/" />
+            </SignedIn>
           </div>
         </div>
 
