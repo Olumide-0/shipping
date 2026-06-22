@@ -9,8 +9,12 @@
  */
 
 import type * as carts from "../carts.js";
+import type * as http from "../http.js";
+import type * as orders from "../orders.js";
 import type * as products from "../products.js";
 import type * as seed from "../seed.js";
+import type * as stripe from "../stripe.js";
+import type * as users from "../users.js";
 
 import type {
   ApiFromModules,
@@ -20,8 +24,12 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   carts: typeof carts;
+  http: typeof http;
+  orders: typeof orders;
   products: typeof products;
   seed: typeof seed;
+  stripe: typeof stripe;
+  users: typeof users;
 }>;
 
 /**

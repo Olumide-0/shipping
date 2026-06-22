@@ -4,12 +4,9 @@ import { ShoppingCart, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
-import {
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
+import { Show, SignInButton, UserButton } from "@clerk/nextjs";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
 const navLinks = [
   { label: "Shop", href: "/" },
@@ -21,6 +18,10 @@ export default function Nav() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
+
+  // Live cart count. Returns { items: [] } when signed out, so this is 0.
+  const cart = useQuery(api.carts.get);
+  const cartCount = cart?.items?.reduce((sum, i) => sum + i.quantity, 0) ?? 0;
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -80,21 +81,26 @@ export default function Nav() {
           {/* Right Icons */}
           <div className="flex items-center gap-4">
             <Link href="/cart">
-              <button className="text-[#1A1B1F] hover:text-[#1A6BFF] transition-colors duration-150 cursor-pointer">
+              <button className="relative text-[#1A1B1F] hover:text-[#1A6BFF] transition-colors duration-150 cursor-pointer">
                 <ShoppingCart size={16} strokeWidth={1.8} />
+                {cartCount > 0 && (
+                  <span className="absolute -top-2 -right-2 min-w-[16px] h-[16px] px-1 flex items-center justify-center bg-[#00677F] text-white text-[10px] font-bold rounded-full">
+                    {cartCount}
+                  </span>
+                )}
               </button>
             </Link>
 
-            <SignedOut>
+            <Show when="signed-out">
               <SignInButton mode="modal">
                 <button className="text-[13px] font-medium text-[#1A1B1F] hover:text-[#00677F] transition-colors duration-150 cursor-pointer">
                   Sign in
                 </button>
               </SignInButton>
-            </SignedOut>
-            <SignedIn>
+            </Show>
+            <Show when="signed-in">
               <UserButton afterSignOutUrl="/" />
-            </SignedIn>
+            </Show>
           </div>
         </div>
 

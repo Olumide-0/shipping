@@ -4,6 +4,17 @@ import { v } from "convex/values";
 // All money is stored as integer CENTS (e.g. $499.00 -> 49900).
 // Format to dollars only at display time. Stripe also expects cents.
 export default defineSchema({
+  // One row per Clerk user, upserted by <UserSync /> on sign-in. Holds the
+  // name/email the default Convex JWT omits, so orders can carry a real
+  // customer record without calling Clerk. Keyed by `userId` = Clerk
+  // identity.subject — the same id used in carts/orders.
+  users: defineTable({
+    userId: v.string(),
+    name: v.optional(v.string()),
+    email: v.optional(v.string()),
+    phone: v.optional(v.string()),
+  }).index("by_user", ["userId"]),
+
   // The catalog. Single source of truth that replaces the hardcoded
   // product arrays scattered across the app pages.
   products: defineTable({
@@ -49,7 +60,7 @@ export default defineSchema({
   orders: defineTable({
     userId: v.string(),
     orderNumber: v.string(),
-    status: v.string(), // "paid" | "shipped" | "delivered"
+    status: v.string(), // "pending" | "paid" | "shipped" | "delivered"
     stripeSessionId: v.string(),
     items: v.array(
       v.object({
@@ -59,14 +70,18 @@ export default defineSchema({
         image: v.string(),
       }),
     ),
-    shippingAddress: v.object({
-      name: v.string(),
-      line1: v.string(),
-      line2: v.optional(v.string()),
-      city: v.string(),
-      postalCode: v.string(),
-      country: v.string(),
-    }),
+    // Filled by the Stripe webhook once the customer completes the hosted
+    // checkout (Stripe collects the address). Absent on a pending order.
+    shippingAddress: v.optional(
+      v.object({
+        name: v.string(),
+        line1: v.string(),
+        line2: v.optional(v.string()),
+        city: v.string(),
+        postalCode: v.string(),
+        country: v.string(),
+      }),
+    ),
     subtotal: v.number(),
     tax: v.number(),
     total: v.number(),
