@@ -38,6 +38,11 @@ export default defineSchema({
     ),
     inStock: v.boolean(),
     badge: v.optional(v.string()),
+    // Long-form marketing blurb for the "Edge" card on the detail page. Per
+    // product, so one product's copy can never render under another's name.
+    edgeNote: v.optional(
+      v.object({ title: v.string(), body: v.string() }),
+    ),
   }).index("by_slug", ["slug"]),
 
   // One cart row per logged-in user. Stores only references + quantity;
@@ -60,7 +65,12 @@ export default defineSchema({
   orders: defineTable({
     userId: v.string(),
     orderNumber: v.string(),
-    status: v.string(), // "pending" | "paid" | "shipped" | "delivered"
+    // "pending"  – session opened, payment not confirmed yet
+    // "paid"     – webhook confirmed payment_status === "paid"
+    // "failed"   – a delayed payment method ultimately declined
+    // "expired"  – the customer never completed the Checkout Session
+    // "shipped" | "delivered" – reserved for fulfilment, not written yet
+    status: v.string(),
     stripeSessionId: v.string(),
     items: v.array(
       v.object({
@@ -82,9 +92,13 @@ export default defineSchema({
         country: v.string(),
       }),
     ),
+    // Estimated at session-creation time from the cart, then overwritten with
+    // Stripe's authoritative amounts once payment is confirmed (a promotion
+    // code applied at checkout changes them).
     subtotal: v.number(),
     tax: v.number(),
     total: v.number(),
+    discount: v.optional(v.number()), // cents off, from a Stripe promotion code
   })
     .index("by_user", ["userId"])
     .index("by_session", ["stripeSessionId"]),

@@ -50,25 +50,37 @@ export const createPending = internalMutation({
   },
 });
 
-// Called by the Stripe webhook on `checkout.session.completed`. Marks the order
-// paid, records the shipping address Stripe collected, and empties the cart.
+// Called by the Stripe webhook once payment is CONFIRMED (see convex/stripe.ts
+// for which events qualify). Marks the order paid, records the shipping address
+// Stripe collected, overwrites our estimated totals with Stripe's authoritative
+// amounts, and empties the cart.
 // Idempotent: Stripe can deliver a webhook more than once, so we no-op if the
 // order is already past "pending".
 export const fulfill = internalMutation({
   args: {
     stripeSessionId: v.string(),
     shippingAddress: v.optional(addressValidator),
+    // What Stripe actually charged, in cents. Absent if Stripe didn't report
+    // it, in which case the estimate written at session creation stands.
+    // `subtotal`/`tax` stay as recorded: they are the pre-discount line
+    // amounts, and subtotal + tax - discount === total.
+    total: v.optional(v.number()),
+    discount: v.optional(v.number()),
   },
-  handler: async (ctx, { stripeSessionId, shippingAddress }) => {
+  handler: async (ctx, args) => {
     const order = await ctx.db
       .query("orders")
-      .withIndex("by_session", (q) => q.eq("stripeSessionId", stripeSessionId))
+      .withIndex("by_session", (q) =>
+        q.eq("stripeSessionId", args.stripeSessionId),
+      )
       .unique();
     if (!order || order.status !== "pending") return;
 
     await ctx.db.patch(order._id, {
       status: "paid",
-      ...(shippingAddress ? { shippingAddress } : {}),
+      ...(args.shippingAddress ? { shippingAddress: args.shippingAddress } : {}),
+      ...(args.total !== undefined ? { total: args.total } : {}),
+      ...(args.discount ? { discount: args.discount } : {}),
     });
 
     const cart = await ctx.db
@@ -76,6 +88,43 @@ export const fulfill = internalMutation({
       .withIndex("by_user", (q) => q.eq("userId", order.userId))
       .unique();
     if (cart) await ctx.db.patch(cart._id, { items: [] });
+  },
+});
+
+// Closes out an order that will never be paid: the Checkout Session expired
+// without the customer finishing, or a delayed payment method (bank debit,
+// etc.) came back declined. Without this, abandoned checkouts sit at "pending"
+// forever. Only touches pending orders, so a paid order can't be un-paid by a
+// late or duplicate event.
+export const markUnpaid = internalMutation({
+  args: {
+    stripeSessionId: v.string(),
+    status: v.union(v.literal("failed"), v.literal("expired")),
+  },
+  handler: async (ctx, { stripeSessionId, status }) => {
+    const order = await ctx.db
+      .query("orders")
+      .withIndex("by_session", (q) => q.eq("stripeSessionId", stripeSessionId))
+      .unique();
+    if (!order || order.status !== "pending") return;
+    await ctx.db.patch(order._id, { status });
+  },
+});
+
+// The signed-in user's order history, newest first, for /orders. Expired
+// sessions (checkouts the customer abandoned) are hidden — they aren't orders
+// the customer ever placed, so showing them would just be noise.
+export const listMine = query({
+  args: {},
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) return [];
+    const orders = await ctx.db
+      .query("orders")
+      .withIndex("by_user", (q) => q.eq("userId", identity.subject))
+      .order("desc")
+      .collect();
+    return orders.filter((o) => o.status !== "expired");
   },
 });
 

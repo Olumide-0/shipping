@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import car from "../public/asset/image/Frame 5 (1).png";
-import { Truck, BadgeCheck, LockKeyhole, Sliders, Eye, CircleCheck, Star  } from "lucide-react";
+import { Truck, BadgeCheck, LockKeyhole, Sliders, Eye, CircleCheck } from "lucide-react";
 import Link from "next/link";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
@@ -238,11 +238,13 @@ export default function Home() {
             <div key={product._id} className="flex-none w-[72vw] max-w-[280px] flex flex-col gap-[8px]">
               {/* Image + Info link to the detail page */}
               <Link href={`/collections/${product.slug}`} className="group flex flex-col gap-[8px]">
-                <div className="w-full aspect-[4/3] rounded-xl overflow-hidden bg-gray-100">
-                  <img
+                <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-gray-100">
+                  <Image
                     src={product.images[0]}
                     alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                    fill
+                    sizes="72vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                   />
                 </div>
 
@@ -256,7 +258,8 @@ export default function Home() {
               <div className="flex items-center gap-[10px] pt-[12px]">
                 <AddToCartButton
                   productId={product._id}
-                  className="flex-1 bg-[#1A1B1F] hover:bg-[#2d2e33] text-[#FAF8FE] text-[11px] text-center font-semibold tracking-widest py-[16px] rounded-md transition-colors duration-200 cursor-pointer"
+                  inStock={product.inStock}
+                  className="flex-1 bg-[#1A1B1F] hover:bg-[#2d2e33] disabled:bg-gray-300 disabled:cursor-not-allowed text-[#FAF8FE] text-[11px] text-center font-semibold tracking-widest py-[16px] rounded-md transition-colors duration-200 cursor-pointer"
                 />
                 <Link href={`/collections/${product.slug}`} aria-label={`View ${product.name}`} className="w-[43px] h-[43px] flex items-center justify-center border border-gray-200 rounded-md hover:border-gray-400 transition-colors duration-200 shrink-0">
                   <Eye size={15} strokeWidth={1.6} className="text-gray-500" />
@@ -273,10 +276,12 @@ export default function Home() {
               {/* Image + Info link to the detail page */}
               <Link href={`/collections/${product.slug}`} className="group flex flex-col gap-[8px]">
                 <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-gray-100">
-                  <img
+                  <Image
                     src={product.images[0]}
                     alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                    fill
+                    sizes="25vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                   />
                 </div>
 
@@ -290,7 +295,8 @@ export default function Home() {
               <div className="flex items-center gap-[12px] pt-[16px]">
                 <AddToCartButton
                   productId={product._id}
-                  className="flex-1 bg-[#1A1B1F] hover:bg-[#2d2e33] text-[#FAF8FE] text-center text-[12px] font-semibold tracking-widest py-[20px] rounded-md transition-colors duration-200 cursor-pointer"
+                  inStock={product.inStock}
+                  className="flex-1 bg-[#1A1B1F] hover:bg-[#2d2e33] disabled:bg-gray-300 disabled:cursor-not-allowed text-[#FAF8FE] text-center text-[12px] font-semibold tracking-widest py-[20px] rounded-md transition-colors duration-200 cursor-pointer"
                 />
                 <Link href={`/collections/${product.slug}`} aria-label={`View ${product.name}`} className="w-[43px] h-[37px] flex items-center justify-center border border-gray-200 rounded-md hover:border-gray-400 transition-colors duration-200 shrink-0">
                   <Eye size={15} strokeWidth={1.6} className="text-gray-500" />
@@ -337,8 +343,14 @@ export default function Home() {
         </div>
  
         {/* Right Image */}
-        <div className="w-full lg:w-[60%]  xl:w-[50%] rounded-md">
-          <img src={car4} alt="Car transformation" className="w-full  lg:h-[550px]  rounded-md" />
+        <div className="relative w-full aspect-[4/3] lg:aspect-auto lg:h-[550px] lg:w-[60%] xl:w-[50%] rounded-md overflow-hidden">
+          <Image
+            src={car4}
+            alt="Car transformation"
+            fill
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            className="object-cover rounded-md"
+          />
         </div>
  
       </div>
@@ -347,8 +359,14 @@ export default function Home() {
   <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
 
     {/* Image */}
-    <div className="w-full lg:w-[50%] flex items-center justify-center">
-      <img src={car5} alt="Lumina Ambient Kit" className="w-full lg:h-[600px]  rounded-2xl" />
+    <div className="relative w-full aspect-square lg:aspect-auto lg:h-[600px] lg:w-[50%] rounded-2xl overflow-hidden">
+      <Image
+        src={car5}
+        alt="Lumina Ambient Kit"
+        fill
+        sizes="(min-width: 1024px) 50vw, 100vw"
+        className="object-cover rounded-2xl"
+      />
     </div>
 
     {/* Info */}
@@ -364,7 +382,7 @@ export default function Home() {
       </Link>
 
       <p className="text-[20px] lg:text-[24px] font-medium text-[#00677F]">
-        {ambientKit ? formatPrice(ambientKit.price) : "$249.00"}
+        {ambientKit ? formatPrice(ambientKit.price) : "$100.00"}
       </p>
 
       <p className="text-[14px] lg:text-[16px] text-[#3C494E] leading-relaxed">
@@ -383,7 +401,8 @@ export default function Home() {
       {ambientKit ? (
         <AddToCartButton
           productId={ambientKit._id}
-          className="mt-2 w-full lg:w-fit px-[48px] py-[18px] lg:py-[20px] bg-[#00677F] hover:bg-[#155f6d] text-white text-[13px] lg:text-[14px] font-medium tracking-widest rounded-[12px] transition-colors duration-200 cursor-pointer"
+          inStock={ambientKit.inStock}
+          className="mt-2 w-full lg:w-fit px-[48px] py-[18px] lg:py-[20px] bg-[#00677F] hover:bg-[#155f6d] disabled:bg-gray-300 disabled:cursor-not-allowed text-white text-[13px] lg:text-[14px] font-medium tracking-widest rounded-[12px] transition-colors duration-200 cursor-pointer"
         />
       ) : (
         <button disabled className="mt-2 w-full lg:w-fit px-[48px] py-[18px] lg:py-[20px] bg-[#00677F]/50 text-white text-[13px] lg:text-[14px] font-medium tracking-widest rounded-[12px]">
@@ -444,7 +463,7 @@ export default function Home() {
           <div>
             <div className="flex items-center gap-0.5 mb-3 md:mb-4">
               {Array.from({ length: 5 }).map((_, i) => (
-               <img key={i} src={star} alt="star rating" className="w-4 h-4 md:w-5 md:h-5" />
+               <Image key={i} src={star} alt="" width={20} height={20} className="w-4 h-4 md:w-5 md:h-5" />
               ))}
             </div>
             <p className="text-[14px] md:text-[16px] text-[#1A1B1F] leading-relaxed italic xl:w-[85%]">
@@ -453,7 +472,7 @@ export default function Home() {
           </div>
           
           <div className="flex items-center gap-3 mt-2">
-            <img src={avatar} alt={name} className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover" />
+            <Image src={avatar} alt={name} width={48} height={48} className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover" />
             <div>
               <p className="text-[14px] font-medium text-[#1A1B1F]">{name}</p>
               <p className="text-[12px] font-semibold text-[#3C494E]">{role}</p>

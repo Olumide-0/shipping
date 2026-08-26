@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { ShoppingCart, Minus, Plus, CircleCheck, Truck, Smartphone, Download, ChevronLeft, ChevronRight } from "lucide-react";
+import { ShoppingCart, Minus, Plus, CircleCheck, Truck, Smartphone, Download, ChevronLeft, ChevronRight, XCircle } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useQuery } from "convex/react";
@@ -12,21 +13,26 @@ import { AddToCartButton } from "@/components/cart/add-to-cart-button";
 const star = "/asset/icons/Container (2).png";
 const star1 = "/asset/icons/Container (3).png";
 
-const perks = [
-  { icon: <CircleCheck size={16} strokeWidth={1.6} className="text-[#00677F]" />, label: "In Stock - Ready to Ship" },
-  { icon: <Truck size={16} strokeWidth={1.6} className="text-[#00677F]" />, label: "Free 2-Day Delivery" },
-  { icon: <CircleCheck size={16} strokeWidth={1.6} className="text-[#00677F]" />, label: "2-Year Warranty" },
-  { icon: <Smartphone size={16} strokeWidth={1.6} className="text-[#00677F]" />, label: "iOS & Android App" },
-];
+// Availability is read off the product; the rest are store-wide promises.
+function perksFor(inStock: boolean) {
+  return [
+    inStock
+      ? { icon: <CircleCheck size={16} strokeWidth={1.6} className="text-[#00677F]" />, label: "In Stock - Ready to Ship" }
+      : { icon: <XCircle size={16} strokeWidth={1.6} className="text-gray-400" />, label: "Out of Stock - Back Soon" },
+    { icon: <Truck size={16} strokeWidth={1.6} className="text-[#00677F]" />, label: "Free 2-Day Delivery" },
+    { icon: <CircleCheck size={16} strokeWidth={1.6} className="text-[#00677F]" />, label: "2-Year Warranty" },
+    { icon: <Smartphone size={16} strokeWidth={1.6} className="text-[#00677F]" />, label: "iOS & Android App" },
+  ];
+}
 
-// Reviews aren't modelled in Convex yet — kept static for the social-proof block.
+// PLACEHOLDER social proof. Reviews aren't modelled in Convex, so neither these
+// quotes nor the "(128 Reviews)" rating below reflect real data — they need a
+// `reviews` table and a write path before they can be presented as genuine.
 const verifiedReviews = [
   { id: 1, stars: 5, quote: '"The installation was surprisingly clean. The fiber optics are so thin they look factory-installed on my Model S. The app is incredibly responsive."', initials: "JD", name: "Julian D.", tag: "Verified Purchase" },
   { id: 2, stars: 5, quote: '"Technical elegance at its best. The Arctic White setting matches the internal screens perfectly. Highly recommended for EV owners."', initials: "ML", name: "Marcus L.", tag: "Verified Purchase" },
   { id: 3, stars: 4, quote: '"Beautiful product. The setup takes some patience but the result is breathtaking. I love the automation features in the app."', initials: "SK", name: "Sarah K.", tag: "Verified Purchase" },
 ];
-
-const tabs = ["SPECIFICATIONS", "INSTALLATION", "COMPATIBILITY"];
 
 export default function ProductDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -41,7 +47,6 @@ export default function ProductDetail() {
   const [overrideImage, setOverrideImage] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [activeThumb, setActiveThumb] = useState(0);
-  const [activeTab, setActiveTab] = useState("SPECIFICATIONS");
 
   if (product === undefined) {
     return <div className="w-full bg-white px-5 pt-32 pb-20 text-center text-gray-400">Loading…</div>;
@@ -60,6 +65,7 @@ export default function ProductDetail() {
 
   const mainImage = overrideImage ?? product.images[activeThumb] ?? product.images[0];
   const specs = product.specs ?? [];
+  const perks = perksFor(product.inStock);
 
   return (
     <div>
@@ -68,8 +74,15 @@ export default function ProductDetail() {
 
           {/* Left — Images */}
           <div className="flex-1 flex flex-col gap-4">
-            <div className="w-full aspect-square md:aspect-[4/3] lg:aspect-square rounded-xl md:rounded-2xl overflow-hidden bg-gray-100">
-              <img src={mainImage} alt={product.name} className="w-full h-full object-cover" />
+            <div className="relative w-full aspect-square md:aspect-[4/3] lg:aspect-square rounded-xl md:rounded-2xl overflow-hidden bg-gray-100">
+              <Image
+                src={mainImage}
+                alt={product.name}
+                fill
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                priority
+                className="object-cover"
+              />
             </div>
 
             <div className="grid grid-cols-5 gap-2 md:gap-3">
@@ -81,7 +94,7 @@ export default function ProductDetail() {
                     overrideImage === null && activeThumb === i ? "border-[#00677F]" : "border-transparent"
                   }`}
                 >
-                  <img src={src} alt="" className="w-full h-full object-cover" />
+                  <Image src={src} alt="" fill sizes="20vw" className="object-cover" />
                 </button>
               ))}
             </div>
@@ -93,13 +106,13 @@ export default function ProductDetail() {
             <div className="flex flex-col gap-6 lg:gap-[30px]">
               <div className="flex flex-col gap-2 lg:gap-[10px]">
 
-                {/* Reviews */}
+                {/* Reviews — PLACEHOLDER rating, see note above verifiedReviews */}
                 <div className="flex items-center gap-1 md:gap-2">
                   {[1, 2, 3, 4].map((s) => (
-                    <img key={s} src={star} alt="star" className="w-3.5 md:w-4" />
+                    <Image key={s} src={star} alt="" width={16} height={16} className="w-3.5 md:w-4" />
                   ))}
-                  <img src={star1} alt="half-star" className="w-3.5 md:w-4" />
-                  <span className="text-[12px] text-[#3C494E] font-semibold ml-1">(128 Reviews)</span>
+                  <Image src={star1} alt="" width={16} height={16} className="w-3.5 md:w-4" />
+                  <span className="text-[12px] text-[#3C494E] font-semibold ml-1">4.5 out of 5</span>
                 </div>
 
                 {/* Title */}
@@ -168,7 +181,8 @@ export default function ProductDetail() {
                 productId={product._id}
                 variant={selectedColor ?? undefined}
                 quantity={quantity}
-                className="md:w-[50%] w-full flex items-center justify-center gap-2 py-4 lg:py-[19px] bg-[#00677F] hover:bg-[#005569] text-white text-[13px] lg:text-[14px] font-medium tracking-widest rounded-[8px] transition-colors duration-200 cursor-pointer"
+                inStock={product.inStock}
+                className="md:w-[50%] w-full flex items-center justify-center gap-2 py-4 lg:py-[19px] bg-[#00677F] hover:bg-[#005569] disabled:bg-gray-300 disabled:cursor-not-allowed text-white text-[13px] lg:text-[14px] font-medium tracking-widest rounded-[8px] transition-colors duration-200 cursor-pointer"
               >
                 <ShoppingCart size={15} />
                 ADD TO CART
@@ -196,63 +210,51 @@ export default function ProductDetail() {
         </div>
       </section>
 
-      {/* Specifications Section — only when the product has specs */}
-      {specs.length > 0 && (
+      {/* Details Section — whatever this product actually has */}
+      {(specs.length > 0 || product.edgeNote) && (
         <section className="w-full bg-white px-5 py-8 md:px-12 md:py-12 lg:px-[80px] lg:py-16">
           <div>
-            {/* Tabs */}
-            <div className="flex items-center gap-6 md:gap-10 border-b border-gray-200 mb-8 md:mb-10 overflow-x-auto scrollbar-hide whitespace-nowrap">
-              {tabs.map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`pb-3 text-[13px] md:text-[14px] font-medium tracking-widest transition-colors duration-150 flex-shrink-0 cursor-pointer ${
-                    activeTab === tab
-                      ? "text-[#1A1B1F] border-b-2 border-[#00677F]"
-                      : "text-[#3C494E] hover:text-[#3C494E]"
-                  }`}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
-
             {/* Content */}
             <div className="flex flex-col lg:flex-row gap-10 lg:gap-[64px]">
 
               {/* Left — Specs Table */}
-              <div className="w-full lg:w-1/2 flex flex-col">
-                <h2 className="text-[20px] md:text-[24px] font-medium text-[#1A1B1F] mb-6 lg:mb-[24px]">
-                  Technical Details
-                </h2>
-                <div className="flex flex-col gap-4 lg:gap-[16px]">
-                  {specs.map(({ label, value }) => (
-                    <div key={label} className="flex items-center justify-between py-3 border-b border-gray-100 gap-4">
-                      <span className="text-[14px] md:text-[16px] text-[#3C494E]">{label}</span>
-                      <span className="text-[14px] md:text-[16px] font-semibold text-[#1A1B1F] text-right">
-                        {value}
-                      </span>
-                    </div>
-                  ))}
+              {specs.length > 0 && (
+                <div className="w-full lg:w-1/2 flex flex-col">
+                  <h2 className="text-[20px] md:text-[24px] font-medium text-[#1A1B1F] mb-6 lg:mb-[24px] pb-3 border-b border-gray-200">
+                    Technical Details
+                  </h2>
+                  <div className="flex flex-col gap-4 lg:gap-[16px]">
+                    {specs.map(({ label, value }) => (
+                      <div key={label} className="flex items-center justify-between py-3 border-b border-gray-100 gap-4">
+                        <span className="text-[14px] md:text-[16px] text-[#3C494E]">{label}</span>
+                        <span className="text-[14px] md:text-[16px] font-semibold text-[#1A1B1F] text-right">
+                          {value}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
-              {/* Right — Edge Card */}
-              <div className="w-full lg:w-1/2 flex items-start">
-                <div className="w-full bg-[#F4F3F8] rounded-xl md:rounded-2xl p-6 lg:p-[32px] flex flex-col gap-5 lg:gap-[24px]">
-                  <h3 className="text-[20px] md:text-[24px] font-medium text-[#1A1B1F]">
-                    The Luxedrive Edge
-                  </h3>
-                  <p className="w-full xl:w-[85%] text-[15px] md:text-[16px] text-[#3C494E] leading-relaxed">
-                    Our fiber optic cores are engineered for uniform light distribution without &quot;hot spots.&quot; Unlike standard LED strips, Lumina Pro uses high-density glass polymers that remain flexible while maintaining optical clarity for over 10,000 hours of operation.
-                  </p>
+              {/* Right — Edge Card. Copy comes from the product doc, so one
+                  product's blurb can't appear under another's name. */}
+              {product.edgeNote && (
+                <div className="w-full lg:w-1/2 flex items-start">
+                  <div className="w-full bg-[#F4F3F8] rounded-xl md:rounded-2xl p-6 lg:p-[32px] flex flex-col gap-5 lg:gap-[24px]">
+                    <h3 className="text-[20px] md:text-[24px] font-medium text-[#1A1B1F]">
+                      {product.edgeNote.title}
+                    </h3>
+                    <p className="w-full xl:w-[85%] text-[15px] md:text-[16px] text-[#3C494E] leading-relaxed">
+                      {product.edgeNote.body}
+                    </p>
 
-                  <button className="flex items-center gap-2 text-[13px] md:text-[14px] font-medium tracking-widest text-[#00677F] hover:text-[#005569] transition-colors w-fit mt-2 cursor-pointer">
-                    <Download size={15} strokeWidth={2} />
-                    DOWNLOAD MANUAL (PDF)
-                  </button>
+                    <button className="flex items-center gap-2 text-[13px] md:text-[14px] font-medium tracking-widest text-[#00677F] hover:text-[#005569] transition-colors w-fit mt-2 cursor-pointer">
+                      <Download size={15} strokeWidth={2} />
+                      DOWNLOAD MANUAL (PDF)
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
 
             </div>
           </div>
@@ -288,7 +290,7 @@ export default function ProductDetail() {
                 <div className="flex flex-col gap-5 lg:gap-[26px]">
                   <div className="flex items-center gap-1">
                     {Array.from({ length: 5 }).map((_, i) => (
-                      <img key={i} src={star} alt="star" className="w-4 h-4 md:w-5 md:h-5" />
+                      <Image key={i} src={star} alt="" width={20} height={20} className="w-4 h-4 md:w-5 md:h-5" />
                     ))}
                   </div>
                   <p className="text-[14px] md:text-[16px] text-[#1A1B1F] leading-relaxed italic xl:w-[85%]">
@@ -339,11 +341,13 @@ export default function ProductDetail() {
                 key={p._id}
                 className="flex flex-col gap-3 lg:gap-[24px] cursor-pointer group w-[70vw] sm:w-[45vw] lg:w-auto flex-shrink-0 snap-start"
               >
-                <div className="w-full aspect-square rounded-xl md:rounded-2xl overflow-hidden bg-gray-100">
-                  <img
+                <div className="relative w-full aspect-square rounded-xl md:rounded-2xl overflow-hidden bg-gray-100">
+                  <Image
                     src={p.images[0]}
                     alt={p.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                    fill
+                    sizes="(min-width: 1024px) 25vw, 70vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                   />
                 </div>
 

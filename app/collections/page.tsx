@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { Eye } from "lucide-react";
 import { useQuery } from "convex/react";
@@ -40,16 +41,25 @@ export default function Collections() {
                 {/* Image + info link to the detail page */}
                 <Link href={`/collections/${product.slug}`} className="group flex flex-col gap-[8px]">
                   <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-gray-100">
-                    <img
+                    <Image
                       src={product.images[0]}
                       alt={product.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                      fill
+                      sizes="(min-width: 1024px) 25vw, 50vw"
+                      className={`object-cover group-hover:scale-105 transition-transform duration-500 ease-out ${
+                        product.inStock ? "" : "opacity-60 grayscale"
+                      }`}
                     />
-                    {product.badge && (
+                    {/* Availability outranks a marketing badge in the corner. */}
+                    {!product.inStock ? (
+                      <span className="absolute top-2 left-2 text-[9px] font-bold tracking-widest text-white bg-[#1A1B1F]/80 rounded-full px-2 py-1 uppercase">
+                        Out of stock
+                      </span>
+                    ) : product.badge ? (
                       <span className="absolute top-2 left-2 text-[9px] font-bold tracking-widest text-white bg-[#00677F] rounded-full px-2 py-1 uppercase">
                         {product.badge}
                       </span>
-                    )}
+                    ) : null}
                   </div>
                   <div>
                     <p className="text-[10px] md:text-[12px] font-semibold tracking-widest text-[#3C494E] uppercase">
@@ -68,7 +78,8 @@ export default function Collections() {
                 <div className="flex items-center gap-[10px] pt-[8px]">
                   <AddToCartButton
                     productId={product._id}
-                    className="flex-1 bg-[#1A1B1F] hover:bg-[#2d2e33] text-[#FAF8FE] text-[11px] text-center font-semibold tracking-widest py-[14px] rounded-md transition-colors duration-200 cursor-pointer"
+                    inStock={product.inStock}
+                    className="flex-1 bg-[#1A1B1F] hover:bg-[#2d2e33] disabled:bg-gray-300 disabled:cursor-not-allowed text-[#FAF8FE] text-[11px] text-center font-semibold tracking-widest py-[14px] rounded-md transition-colors duration-200 cursor-pointer"
                   />
                   <Link
                     href={`/collections/${product.slug}`}

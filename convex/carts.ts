@@ -1,5 +1,5 @@
 import { query, mutation } from "./_generated/server";
-import { v } from "convex/values";
+import { v, ConvexError } from "convex/values";
 import { QueryCtx, MutationCtx } from "./_generated/server";
 
 // Returns the signed-in user's id, or throws. Identity is verified by Convex
@@ -44,6 +44,17 @@ export const addItem = mutation({
   handler: async (ctx, { productId, variant, quantity }) => {
     const userId = await requireUserId(ctx);
     const qty = quantity ?? 1;
+
+    // Availability is enforced here, not just hidden in the UI — the mutation
+    // is callable directly, and stock can change between render and click.
+    // ConvexError (rather than Error) so the message reaches the browser intact
+    // and the UI can show the actual reason instead of "something went wrong".
+    const product = await ctx.db.get(productId);
+    if (!product) throw new ConvexError("That product no longer exists");
+    if (!product.inStock) {
+      throw new ConvexError(`${product.name} is out of stock`);
+    }
+
     const cart = await ctx.db
       .query("carts")
       .withIndex("by_user", (q) => q.eq("userId", userId))

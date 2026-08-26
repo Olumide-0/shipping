@@ -17,15 +17,15 @@ const navLinks = [
 export default function Nav() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef = useRef(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   // Live cart count. Returns { items: [] } when signed out, so this is 0.
   const cart = useQuery(api.carts.get);
   const cartCount = cart?.items?.reduce((sum, i) => sum + i.quantity, 0) ?? 0;
 
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setMenuOpen(false);
       }
     }
@@ -38,6 +38,18 @@ export default function Nav() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [menuOpen]);
+
+  const linkClass = (href: string) =>
+    `text-[13px] relative pb-[2px] transition-colors duration-150 ${
+      pathname === href
+        ? "text-[#00677F] font-medium after:absolute after:left-0 after:bottom-0 after:w-full after:h-[1.5px] after:bg-[#00677F] after:rounded-full"
+        : "text-[#1A1B1F] hover:text-[#00677F]"
+    }`;
+
+  const drawerLinkClass = (href: string) =>
+    `block text-[14px] py-3 border-b border-gray-50 transition-colors duration-150 ${
+      pathname === href ? "text-[#00677F] font-medium" : "text-[#1A1B1F] hover:text-[#00677F]"
+    }`;
 
   return (
     <nav className="w-full">
@@ -64,18 +76,19 @@ export default function Nav() {
           <ul className="hidden lg:flex items-center gap-6">
             {navLinks.map(({ label, href }) => (
               <li key={label}>
-                <Link
-                  href={href}
-                  className={`text-[13px] relative pb-[2px] transition-colors duration-150 ${
-                    pathname === href
-                      ? "text-[#00677F] font-medium after:absolute after:left-0 after:bottom-0 after:w-full after:h-[1.5px] after:bg-[#00677F] after:rounded-full"
-                      : "text-[#1A1B1F] hover:text-[#00677F]"
-                  }`}
-                >
+                <Link href={href} className={linkClass(href)}>
                   {label}
                 </Link>
               </li>
             ))}
+            {/* Order history only means anything with an account. */}
+            <Show when="signed-in">
+              <li>
+                <Link href="/orders" className={linkClass("/orders")}>
+                  Orders
+                </Link>
+              </li>
+            </Show>
           </ul>
 
           {/* Right Icons */}
@@ -99,7 +112,9 @@ export default function Nav() {
               </SignInButton>
             </Show>
             <Show when="signed-in">
-              <UserButton afterSignOutUrl="/" />
+              {/* afterSignOutUrl is a ClerkProvider option in Clerk v7, not a
+                  UserButton prop — it's set in ConvexClientProvider. */}
+              <UserButton />
             </Show>
           </div>
         </div>
@@ -113,16 +128,23 @@ export default function Nav() {
                   <Link
                     href={href}
                     onClick={() => setMenuOpen(false)}
-                    className={`block text-[14px] py-3 border-b border-gray-50 transition-colors duration-150 ${
-                      pathname === href
-                        ? "text-[#00677F] font-medium"
-                        : "text-[#1A1B1F] hover:text-[#00677F]"
-                    }`}
+                    className={drawerLinkClass(href)}
                   >
                     {label}
                   </Link>
                 </li>
               ))}
+              <Show when="signed-in">
+                <li>
+                  <Link
+                    href="/orders"
+                    onClick={() => setMenuOpen(false)}
+                    className={drawerLinkClass("/orders")}
+                  >
+                    Orders
+                  </Link>
+                </li>
+              </Show>
             </ul>
           </div>
         )}
