@@ -1,0 +1,154 @@
+"use client";
+
+import { ShoppingCart, Menu, X } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState, useRef, useEffect } from "react";
+import { Show, SignInButton, UserButton } from "@clerk/nextjs";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+
+const navLinks = [
+  { label: "Shop", href: "/" },
+  { label: "Collections", href: "/collections" },
+  { label: "Support", href: "/support" },
+];
+
+export default function Nav() {
+  const pathname = usePathname();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Live cart count. Returns { items: [] } when signed out, so this is 0.
+  const cart = useQuery(api.carts.get);
+  const cartCount = cart?.items?.reduce((sum, i) => sum + i.quantity, 0) ?? 0;
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+    }
+
+    if (menuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [menuOpen]);
+
+  const linkClass = (href: string) =>
+    `text-[13px] relative pb-[2px] transition-colors duration-150 ${
+      pathname === href
+        ? "text-[#00677F] font-medium after:absolute after:left-0 after:bottom-0 after:w-full after:h-[1.5px] after:bg-[#00677F] after:rounded-full"
+        : "text-[#1A1B1F] hover:text-[#00677F]"
+    }`;
+
+  const drawerLinkClass = (href: string) =>
+    `block text-[14px] py-3 border-b border-gray-50 transition-colors duration-150 ${
+      pathname === href ? "text-[#00677F] font-medium" : "text-[#1A1B1F] hover:text-[#00677F]"
+    }`;
+
+  return (
+    <nav className="w-full">
+      <div ref={menuRef}>
+        <div className="fixed top-0 left-0 right-0 z-10 flex items-center justify-between px-6 lg:px-[80px] py-[24px] bg-white border-b border-gray-100">
+
+          {/* Hamburger – visible on mobile & tablet only */}
+          <button
+            className="lg:hidden text-[#1A1B1F] hover:text-[#00677F] transition-colors duration-150"
+            onClick={() => setMenuOpen((prev) => !prev)}
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? <X size={20} strokeWidth={1.8} /> : <Menu size={20} strokeWidth={1.8} />}
+          </button>
+
+          {/* Logo */}
+          <Link href="/">
+            <h1 className="text-[15px] font-bold tracking-wide text-[#1A1B1F] select-none">
+              GENESIS AUTOMODS
+            </h1>
+          </Link>
+
+          {/* Center Nav Links – desktop only */}
+          <ul className="hidden lg:flex items-center gap-6">
+            {navLinks.map(({ label, href }) => (
+              <li key={label}>
+                <Link href={href} className={linkClass(href)}>
+                  {label}
+                </Link>
+              </li>
+            ))}
+            {/* Order history only means anything with an account. */}
+            <Show when="signed-in">
+              <li>
+                <Link href="/orders" className={linkClass("/orders")}>
+                  Orders
+                </Link>
+              </li>
+            </Show>
+          </ul>
+
+          {/* Right Icons */}
+          <div className="flex items-center gap-4">
+            <Link href="/cart">
+              <button className="relative text-[#1A1B1F] hover:text-[#1A6BFF] transition-colors duration-150 cursor-pointer">
+                <ShoppingCart size={16} strokeWidth={1.8} />
+                {cartCount > 0 && (
+                  <span className="absolute -top-2 -right-2 min-w-[16px] h-[16px] px-1 flex items-center justify-center bg-[#00677F] text-white text-[10px] font-bold rounded-full">
+                    {cartCount}
+                  </span>
+                )}
+              </button>
+            </Link>
+
+            <Show when="signed-out">
+              <SignInButton mode="modal">
+                <button className="text-[13px] font-medium text-[#1A1B1F] hover:text-[#00677F] transition-colors duration-150 cursor-pointer">
+                  Sign in
+                </button>
+              </SignInButton>
+            </Show>
+            <Show when="signed-in">
+              {/* afterSignOutUrl is a ClerkProvider option in Clerk v7, not a
+                  UserButton prop — it's set in ConvexClientProvider. */}
+              <UserButton />
+            </Show>
+          </div>
+        </div>
+
+        {/* ── Mobile / Tablet Drawer ── */}
+        {menuOpen && (
+          <div className="lg:hidden fixed top-[73px] left-0 right-0 z-10 bg-white border-b border-gray-100 shadow-sm">
+            <ul className="flex flex-col px-6 py-4 gap-1">
+              {navLinks.map(({ label, href }) => (
+                <li key={label}>
+                  <Link
+                    href={href}
+                    onClick={() => setMenuOpen(false)}
+                    className={drawerLinkClass(href)}
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
+              <Show when="signed-in">
+                <li>
+                  <Link
+                    href="/orders"
+                    onClick={() => setMenuOpen(false)}
+                    className={drawerLinkClass("/orders")}
+                  >
+                    Orders
+                  </Link>
+                </li>
+              </Show>
+            </ul>
+          </div>
+        )}
+      </div>
+    </nav>
+  );
+}

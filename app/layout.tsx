@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils";
 import Nav from "../components/global/nav";
 import Footer1 from "@/components/global/footer1";
+import { ConvexClientProvider } from "@/components/convex-client-provider";
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
@@ -25,10 +26,12 @@ export default function RootLayout({
       className={cn("antialiased", fontMono.variable, "font-sans", inter.variable)}
     >
       <body>
-        <ThemeProvider>
-          <Nav />
-          {children}</ThemeProvider>
-          <Footer1/>
+        <ConvexClientProvider>
+          <ThemeProvider>
+            <Nav />
+            {children}</ThemeProvider>
+            <Footer1/>
+        </ConvexClientProvider>
       </body>
     </html>
   )

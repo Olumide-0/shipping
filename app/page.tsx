@@ -2,16 +2,17 @@
 import Image from "next/image";
 import { useState } from "react";
 import car from "../public/asset/image/Frame 5 (1).png";
-import { Truck, BadgeCheck, LockKeyhole, Sliders, Eye, CircleCheck, Star  } from "lucide-react";
+import { Truck, BadgeCheck, LockKeyhole, Sliders, Eye, CircleCheck } from "lucide-react";
 import Link from "next/link";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { formatPrice } from "@/lib/utils";
+import { AddToCartButton } from "@/components/cart/add-to-cart-button";
 // import Footer from "../components/global/footer"
 
 
 
 
-const car1 = "/asset/image/Background.png";
-const car2 = "/asset/image/Lumina Pro Kit.png";
-const car3 = "/asset/image/Velocity Audio Kit.png";
 const car4 = "/asset/image/Container.png";
 const car5 = "/asset/image/Container (1).png";
 const mobile = "/asset/image/Container (4).png";
@@ -19,33 +20,6 @@ const star = "/asset/icons/Container (2).png"
 const img = "/asset/image/Background (1).png"
 const img1 = "/asset/image/Background (2).png"
 const img2 = "/asset/image/Background (3).png"
-
-const products = [
-  {
-    id: 1,
-    name: "Lumina Pro Kit",
-    price: "$499.00",
-    image: car2,
-  },
-  {
-    id: 2,
-    name: "Carbon Fiber Wheel",
-    price: "$1,200.00",
-    image: car1,
-  },
-  {
-    id: 3,
-    name: "Velocity Audio Kit",
-    price: "$899.00",
-    image: car3,
-  },
-  {
-    id: 4,
-    name: "Stealth Wall Charger",
-    price: "$649.00",
-    image: car2,
-  },
-];
 
 const features = [
   {
@@ -126,6 +100,11 @@ const faqs = [
 
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  // Live from Convex. Empty while loading.
+  const allProducts = useQuery(api.products.list) ?? [];
+  const products = allProducts.slice(0, 4); // Featured grid
+  // The "New Arrival" promo block below highlights this specific product.
+  const ambientKit = allProducts.find((p) => p.slug === "lumina-ambient-kit");
   return (
   <div>
      <section className="relative w-full h-screen">
@@ -256,30 +235,35 @@ export default function Home() {
         {/* ── Mobile: horizontal scroll, plain stacked cards ── */}
         <div className="lg:hidden flex gap-4 overflow-x-auto px-6 pb-2">
           {products.map((product) => (
-            <div key={product.id} className="flex-none w-[72vw] max-w-[280px] flex flex-col gap-[8px]">
-              {/* Image */}
-              <div className="w-full aspect-[4/3] rounded-xl overflow-hidden bg-gray-100">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-full object-cover"
-                />
-              </div>
- 
-              {/* Info */}
-              <div>
-                <p className="text-[18px] font-medium text-[#1A1B1F] pt-[12px]">{product.name}</p>
-                <p className="text-[13px] text-[#00677F] font-medium">{product.price}</p>
-              </div>
- 
+            <div key={product._id} className="flex-none w-[72vw] max-w-[280px] flex flex-col gap-[8px]">
+              {/* Image + Info link to the detail page */}
+              <Link href={`/collections/${product.slug}`} className="group flex flex-col gap-[8px]">
+                <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-gray-100">
+                  <Image
+                    src={product.images[0]}
+                    alt={product.name}
+                    fill
+                    sizes="72vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                  />
+                </div>
+
+                <div>
+                  <p className="text-[18px] font-medium text-[#1A1B1F] pt-[12px]">{product.name}</p>
+                  <p className="text-[13px] text-[#00677F] font-medium">{formatPrice(product.price)}</p>
+                </div>
+              </Link>
+
               {/* Actions */}
               <div className="flex items-center gap-[10px] pt-[12px]">
-                <Link href="/cart" className="flex-1 bg-[#1A1B1F] hover:bg-[#2d2e33] text-[#FAF8FE] text-[11px] text-center font-semibold tracking-widest py-[16px] rounded-md transition-colors duration-200">
-                  ADD TO CART
-                </Link>
-                <button className="w-[43px] h-[43px] flex items-center justify-center border border-gray-200 rounded-md hover:border-gray-400 transition-colors duration-200 shrink-0">
+                <AddToCartButton
+                  productId={product._id}
+                  inStock={product.inStock}
+                  className="flex-1 bg-[#1A1B1F] hover:bg-[#2d2e33] disabled:bg-gray-300 disabled:cursor-not-allowed text-[#FAF8FE] text-[11px] text-center font-semibold tracking-widest py-[16px] rounded-md transition-colors duration-200 cursor-pointer"
+                />
+                <Link href={`/collections/${product.slug}`} aria-label={`View ${product.name}`} className="w-[43px] h-[43px] flex items-center justify-center border border-gray-200 rounded-md hover:border-gray-400 transition-colors duration-200 shrink-0">
                   <Eye size={15} strokeWidth={1.6} className="text-gray-500" />
-                </button>
+                </Link>
               </div>
             </div>
           ))}
@@ -288,30 +272,35 @@ export default function Home() {
         {/* ── Desktop: original 4-col grid ── */}
         <div className="hidden lg:grid grid-cols-4 gap-[32px] lg:gap-[10px] xl-gap-[32px]">
           {products.map((product) => (
-            <div key={product.id} className="flex flex-col gap-[8px]">
-              {/* Image */}
-              <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-gray-100">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-full object-cover"
-                />
-              </div>
- 
-              {/* Info */}
-              <div>
-                <p className="text-[24px] font-medium text-[#1A1B1F] pt-[16px]">{product.name}</p>
-                <p className="text-[14px] text-[#00677F] font-medium">{product.price}</p>
-              </div>
- 
+            <div key={product._id} className="flex flex-col gap-[8px]">
+              {/* Image + Info link to the detail page */}
+              <Link href={`/collections/${product.slug}`} className="group flex flex-col gap-[8px]">
+                <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-gray-100">
+                  <Image
+                    src={product.images[0]}
+                    alt={product.name}
+                    fill
+                    sizes="25vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                  />
+                </div>
+
+                <div>
+                  <p className="text-[24px] font-medium text-[#1A1B1F] pt-[16px]">{product.name}</p>
+                  <p className="text-[14px] text-[#00677F] font-medium">{formatPrice(product.price)}</p>
+                </div>
+              </Link>
+
               {/* Actions */}
               <div className="flex items-center gap-[12px] pt-[16px]">
-                <Link href="/cart"  className="flex-1 bg-[#1A1B1F] hover:bg-[#2d2e33] text-[#FAF8FE] text-center text-[12px] font-semibold tracking-widest py-[20px] rounded-md transition-colors duration-200">
-                  ADD TO CART
-                </Link>
-                <button className="w-[43px] h-[37px] flex items-center justify-center border border-gray-200 rounded-md hover:border-gray-400 transition-colors duration-200 shrink-0">
+                <AddToCartButton
+                  productId={product._id}
+                  inStock={product.inStock}
+                  className="flex-1 bg-[#1A1B1F] hover:bg-[#2d2e33] disabled:bg-gray-300 disabled:cursor-not-allowed text-[#FAF8FE] text-center text-[12px] font-semibold tracking-widest py-[20px] rounded-md transition-colors duration-200 cursor-pointer"
+                />
+                <Link href={`/collections/${product.slug}`} aria-label={`View ${product.name}`} className="w-[43px] h-[37px] flex items-center justify-center border border-gray-200 rounded-md hover:border-gray-400 transition-colors duration-200 shrink-0">
                   <Eye size={15} strokeWidth={1.6} className="text-gray-500" />
-                </button>
+                </Link>
               </div>
             </div>
           ))}
@@ -354,8 +343,14 @@ export default function Home() {
         </div>
  
         {/* Right Image */}
-        <div className="w-full lg:w-[60%]  xl:w-[50%] rounded-md">
-          <img src={car4} alt="Car transformation" className="w-full  lg:h-[550px]  rounded-md" />
+        <div className="relative w-full aspect-[4/3] lg:aspect-auto lg:h-[550px] lg:w-[60%] xl:w-[50%] rounded-md overflow-hidden">
+          <Image
+            src={car4}
+            alt="Car transformation"
+            fill
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            className="object-cover rounded-md"
+          />
         </div>
  
       </div>
@@ -364,8 +359,14 @@ export default function Home() {
   <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
 
     {/* Image */}
-    <div className="w-full lg:w-[50%] flex items-center justify-center">
-      <img src={car5} alt="Lumina Ambient Kit" className="w-full lg:h-[600px]  rounded-2xl" />
+    <div className="relative w-full aspect-square lg:aspect-auto lg:h-[600px] lg:w-[50%] rounded-2xl overflow-hidden">
+      <Image
+        src={car5}
+        alt="Lumina Ambient Kit"
+        fill
+        sizes="(min-width: 1024px) 50vw, 100vw"
+        className="object-cover rounded-2xl"
+      />
     </div>
 
     {/* Info */}
@@ -374,11 +375,15 @@ export default function Home() {
         NEW ARRIVAL
       </span>
 
-      <h2 className="text-[24px] lg:text-[32px] font-semibold text-[#1A1B1F] leading-tight">
-        Lumina Ambient Kit
-      </h2>
+      <Link href="/collections/lumina-ambient-kit">
+        <h2 className="text-[24px] lg:text-[32px] font-semibold text-[#1A1B1F] leading-tight hover:text-[#00677F] transition-colors duration-150">
+          Lumina Ambient Kit
+        </h2>
+      </Link>
 
-      <p className="text-[20px] lg:text-[24px] font-medium text-[#00677F]">$249.00</p>
+      <p className="text-[20px] lg:text-[24px] font-medium text-[#00677F]">
+        {ambientKit ? formatPrice(ambientKit.price) : "$100.00"}
+      </p>
 
       <p className="text-[14px] lg:text-[16px] text-[#3C494E] leading-relaxed">
         The definitive interior lighting experience. Featuring 64-color selection, smartphone integration, and dynamic music synchronization. Engineered specifically for seamless integration with luxury EV and performance vehicles.
@@ -393,11 +398,17 @@ export default function Home() {
         ))}
       </ul>
 
-      <Link href="/cart">
-      <button className="mt-2 w-full lg:w-fit px-[48px] py-[18px] lg:py-[20px] bg-[#00677F] hover:bg-[#155f6d] text-white text-[13px] lg:text-[14px] font-medium tracking-widest rounded-[12px] transition-colors duration-200">
-        ADD TO CART
-      </button>
-      </Link>
+      {ambientKit ? (
+        <AddToCartButton
+          productId={ambientKit._id}
+          inStock={ambientKit.inStock}
+          className="mt-2 w-full lg:w-fit px-[48px] py-[18px] lg:py-[20px] bg-[#00677F] hover:bg-[#155f6d] disabled:bg-gray-300 disabled:cursor-not-allowed text-white text-[13px] lg:text-[14px] font-medium tracking-widest rounded-[12px] transition-colors duration-200 cursor-pointer"
+        />
+      ) : (
+        <button disabled className="mt-2 w-full lg:w-fit px-[48px] py-[18px] lg:py-[20px] bg-[#00677F]/50 text-white text-[13px] lg:text-[14px] font-medium tracking-widest rounded-[12px]">
+          ADD TO CART
+        </button>
+      )}
     </div>
 
   </div>
@@ -452,7 +463,7 @@ export default function Home() {
           <div>
             <div className="flex items-center gap-0.5 mb-3 md:mb-4">
               {Array.from({ length: 5 }).map((_, i) => (
-               <img key={i} src={star} alt="star rating" className="w-4 h-4 md:w-5 md:h-5" />
+               <Image key={i} src={star} alt="" width={20} height={20} className="w-4 h-4 md:w-5 md:h-5" />
               ))}
             </div>
             <p className="text-[14px] md:text-[16px] text-[#1A1B1F] leading-relaxed italic xl:w-[85%]">
@@ -461,7 +472,7 @@ export default function Home() {
           </div>
           
           <div className="flex items-center gap-3 mt-2">
-            <img src={avatar} alt={name} className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover" />
+            <Image src={avatar} alt={name} width={48} height={48} className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover" />
             <div>
               <p className="text-[14px] font-medium text-[#1A1B1F]">{name}</p>
               <p className="text-[12px] font-semibold text-[#3C494E]">{role}</p>
