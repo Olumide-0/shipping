@@ -87,10 +87,7 @@ const PRODUCTS = [
     slug: "flux-wireless-charger",
     category: "TECH",
     description: "Fast wireless charging pad that mounts cleanly in your console.",
-    // TEMPORARY: $1.00 so live-mode checkout can be tested end to end without
-    // losing ~$1.75 in unrefundable Stripe fees. Restore to 5000 ($50) before
-    // taking real orders, then re-run `npx convex run seed:run`.
-    price: 100,
+    price: 5000,
     images: ["/asset/image/Background (8).png"],
     inStock: true,
   },
